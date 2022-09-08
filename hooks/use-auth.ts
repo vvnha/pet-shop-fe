@@ -2,19 +2,17 @@ import { MS_PER_HOUR } from '@/constants';
 import { authApi } from '@/services/auth';
 import useSWR from 'swr';
 import { PublicConfiguration } from 'swr/dist/types';
+import _get from 'lodash/get';
 
 export function useAuth(options?: Partial<PublicConfiguration>) {
   // manage profile
-  const {
-    data: profile,
-    error,
-    mutate,
-    isValidating,
-  } = useSWR('users/profile', {
+  const { data, error, mutate, isValidating } = useSWR('users/profile', {
     dedupingInterval: MS_PER_HOUR,
     revalidateOnFocus: false,
     ...options,
   });
+
+  const profile = _get(data, 'value', undefined);
 
   const firstLoading = profile === undefined && error === undefined;
 
