@@ -49,7 +49,7 @@ export default function HeaderMobile({ isLoggedIn, logOutClick = undefined }: He
                 color: '#FFAA00',
               }}
             >
-              Puphub
+              Pethub
             </Typography>
           </Stack>
 

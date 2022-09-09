@@ -59,7 +59,7 @@ export default function HeaderDeskTop({ isLoggedIn, logOutClick = undefined }: H
                 color: '#FFAA00',
               }}
             >
-              Puphub
+              Pethub
             </Typography>
           </Stack>
 

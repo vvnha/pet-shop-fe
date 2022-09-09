@@ -47,7 +47,7 @@ export function Footer() {
             <Icon
               component={item.icon}
               sx={{
-                fontSize: '48px',
+                fontSize: '32px',
               }}
             />
           </Box>
