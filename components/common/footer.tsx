@@ -48,6 +48,7 @@ export function Footer() {
               component={item.icon}
               sx={{
                 fontSize: '32px',
+                color: 'primary.main',
               }}
             />
           </Box>
@@ -57,6 +58,7 @@ export function Footer() {
         sx={{
           fontFamily: 'Pangolin',
           fontStyle: 'normal',
+          color: 'primary.main',
         }}
       >
         Copyright ©{new Date().getFullYear()} All rights reserved

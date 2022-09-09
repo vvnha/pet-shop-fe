@@ -14,7 +14,14 @@ export function Product(props: ProductProps) {
       boxShadow="hsla(240,5%,41%,.2) 0px 7px 29px 0px;"
     >
       <Box maxHeight="400px" overflow="hidden">
-        <Image src={heroImg} layout="responsive" alt="avatar" />
+        <Image
+          src={heroImg}
+          height="400px"
+          width="300px"
+          objectFit="contain"
+          layout="responsive"
+          alt="avatar"
+        />
       </Box>
       <Box>
         <Typography
