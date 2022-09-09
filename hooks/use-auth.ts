@@ -13,6 +13,7 @@ export function useAuth(options?: Partial<PublicConfiguration>) {
   });
 
   const profile = _get(data, 'value', undefined);
+  const isLoggedIn = !!profile && profile?.email !== '';
 
   const firstLoading = profile === undefined && error === undefined;
 
@@ -36,5 +37,6 @@ export function useAuth(options?: Partial<PublicConfiguration>) {
     login,
     logout,
     firstLoading,
+    isLoggedIn,
   };
 }
