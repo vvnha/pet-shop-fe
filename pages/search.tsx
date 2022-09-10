@@ -4,7 +4,7 @@ import * as React from 'react';
 
 export interface SearchPageProps {}
 
-export function SearchPage(props: SearchPageProps) {
+export default function SearchPage(props: SearchPageProps) {
   return <Box>Search Page</Box>;
 }
 
