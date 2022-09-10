@@ -38,7 +38,7 @@ export default function Filter(props: FilterProps) {
           }}
           onClick={handleChangeSort}
         >
-          Sort {SortIcon}
+          Price {SortIcon}
         </Button>
       </Stack>
       <Stack direction="column" mt={2}>
