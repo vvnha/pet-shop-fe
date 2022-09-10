@@ -1,24 +1,65 @@
+import { Product } from '@/models';
 import { Grid } from '@mui/material';
 import * as React from 'react';
-import { Product } from './product';
+import { Product as ProductItem } from './product';
 
-export interface ProductListProps {}
+export interface ProductListProps {
+  productsPerRow?: number;
+  productList?: Product[];
+}
 
-export function ProductList(props: ProductListProps) {
+const tempProductList: Product[] = [
+  {
+    id: '1',
+    name: 'Drools | 3KG',
+    description: 'Adult chicken and egg Egg, Chicken 3 kg Dry Adult Dog Food',
+    price: 123.0,
+    pet_list: [],
+    promotion_list: [],
+    image_list: [],
+  },
+  {
+    id: '2',
+    name: 'Drools | 3KG',
+    description: 'Adult chicken and egg Egg, Chicken 3 kg Dry Adult Dog Food',
+    price: 123.0,
+    pet_list: [],
+    promotion_list: [],
+    image_list: [],
+  },
+  {
+    id: '3',
+    name: 'Drools | 3KG',
+    description: 'Adult chicken and egg Egg, Chicken 3 kg Dry Adult Dog Food',
+    price: 123.0,
+    pet_list: [],
+    promotion_list: [],
+    image_list: [],
+  },
+  {
+    id: '4',
+    name: 'Drools | 3KG',
+    description: 'Adult chicken and egg Egg, Chicken 3 kg Dry Adult Dog Food',
+    price: 123.0,
+    pet_list: [],
+    promotion_list: [],
+    image_list: [],
+  },
+];
+
+export function ProductList({
+  productsPerRow = 4,
+  productList = tempProductList,
+}: ProductListProps) {
+  const productNumber = 12 / productsPerRow;
+
   return (
     <Grid container spacing={2}>
-      <Grid item md={3}>
-        <Product />
-      </Grid>
-      <Grid item md={3}>
-        <Product />
-      </Grid>
-      <Grid item md={3}>
-        <Product />
-      </Grid>
-      <Grid item md={3}>
-        <Product />
-      </Grid>
+      {productList.map((product) => (
+        <Grid key={product.id} item md={productNumber}>
+          <ProductItem />
+        </Grid>
+      ))}
     </Grid>
   );
 }

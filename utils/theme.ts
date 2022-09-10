@@ -23,6 +23,15 @@ export const theme = createTheme({
     fontFamily: 'Rubik',
   },
   components: {
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          '&:hover, &.active': {
+            borderColor: '#124C5F',
+          },
+        },
+      },
+    },
     MuiLink: {
       defaultProps: {
         underline: 'none',

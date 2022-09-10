@@ -8,7 +8,7 @@ export interface ProductProps {}
 export function Product(props: ProductProps) {
   return (
     <Box
-      maxWidth="400px"
+      maxWidth="300px"
       p={3}
       borderRadius="7px"
       boxShadow="hsla(240,5%,41%,.2) 0px 7px 29px 0px;"
