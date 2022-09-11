@@ -57,10 +57,6 @@ export default function Login() {
             </Button>
           </Stack>
         </Stack>
-        <p>Profile: {JSON.stringify(profile || {}, null, 4)}</p>
-
-        <button onClick={handleGetProfileClick}>Get Profile</button>
-        <button onClick={handleLogoutClick}>Logout</button>
       </Container>
     </Box>
   );
