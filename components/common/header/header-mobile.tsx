@@ -13,7 +13,7 @@ import {
 import * as React from 'react';
 import GroupIcon from '@/public/Group.svg';
 import Link from 'next/link';
-import { SearchInput } from '../search-input';
+import { SearchInput } from './search-input';
 
 export interface HeaderMobileProps {
   isLoggedIn: boolean;

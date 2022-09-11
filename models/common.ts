@@ -2,6 +2,7 @@ import { NextPage } from 'next';
 import { AppProps } from 'next/app';
 import { ReactElement, ReactNode } from 'react';
 import { EmotionCache } from '@emotion/react';
+import { Product } from './product';
 
 export interface LayoutProps {
   children?: ReactNode;
@@ -28,4 +29,9 @@ export type ApiResponseData<T> = {
     _totalRows: number;
   };
   created_date: string;
+};
+
+export type CartItemType = {
+  product: Product | null;
+  quantity: number;
 };

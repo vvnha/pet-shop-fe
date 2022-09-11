@@ -14,7 +14,7 @@ import { SvgIcon, Link as MuiLink } from '@mui/material';
 import GroupIcon from '@/public/Group.svg';
 import { PermIdentity, ShoppingCartOutlined, Search } from '@mui/icons-material';
 import Link from 'next/link';
-import { SearchInput } from '../search-input';
+import { SearchInput } from './search-input';
 
 export interface HeaderDeskTopProps {
   isLoggedIn: boolean;
