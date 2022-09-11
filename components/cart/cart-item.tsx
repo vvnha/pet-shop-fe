@@ -29,7 +29,7 @@ export default function CartItem(props: CartItemProps) {
         <Stack
           direction={{
             xs: 'column',
-            md: 'column',
+            md: 'row',
             lg: 'row',
           }}
           flex="1 1 auto"
@@ -62,7 +62,7 @@ export default function CartItem(props: CartItemProps) {
           </Stack>
           <Stack direction="row" justifyContent="space-between">
             <Stack direction="column" justifyContent="center" p={1}>
-              <Stack direction="row" spacing={0.5}>
+              <Stack direction="row" spacing={0.5} maxWidth="120px">
                 <IconButton size="small">
                   <Add />
                 </IconButton>
@@ -72,13 +72,12 @@ export default function CartItem(props: CartItemProps) {
                   size="small"
                   InputProps={{
                     inputProps: {
-                      min: 1,
                       style: {
                         maxHeight: '16px',
                       },
                     },
                   }}
-                  type="number"
+                  type="text"
                   sx={{
                     width: '70px',
                     height: '16px',
@@ -89,11 +88,12 @@ export default function CartItem(props: CartItemProps) {
                 </IconButton>
               </Stack>
             </Stack>
-            <Stack direction="column" justifyContent="center" p={1}>
+            <Stack direction="column" justifyContent="center" p={0}>
               <Divider
                 orientation="vertical"
                 sx={{
                   height: '50%',
+                  px: 0,
                 }}
               />
             </Stack>

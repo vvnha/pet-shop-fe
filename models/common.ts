@@ -35,3 +35,10 @@ export type CartItemType = {
   product: Product | null;
   quantity: number;
 };
+
+export type OrderItemType = {
+  product: Product | null;
+  priceAtBuyTime: number;
+  quantity: number;
+  promotion: [];
+};
