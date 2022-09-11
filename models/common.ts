@@ -38,7 +38,7 @@ export type CartItemType = {
 
 export type OrderItemType = {
   product: Product | null;
-  priceAtBuyTime: number;
   quantity: number;
+  priceAtBuyTime: number;
   promotion: [];
 };
