@@ -1,13 +1,18 @@
 import { LayoutProps } from '@/models';
 import Link from 'next/link';
 import * as React from 'react';
+import { Footer, HeaderEmptyLayout } from '@/components/common';
+import { Box } from '@mui/material';
 
 export function EmptyLayout({ children }: LayoutProps) {
   return (
     <>
-      <h1>Empty Layout</h1>
+      <HeaderEmptyLayout />
+      <Box component="main" flexGrow={1}>
+        {children}
+      </Box>
 
-      <div>{children}</div>
+      <Footer />
     </>
   );
 }
