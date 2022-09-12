@@ -31,7 +31,7 @@ const tempCart: CartItemType[] = [
       promotion_list: [],
       image_list: [],
     },
-    quantity: 2,
+    quantity: 1,
   },
   {
     product: {
@@ -103,6 +103,7 @@ export default function CartList({ cartList = tempCart, onOrderChange }: CartLis
 
   useEffect(() => {
     // any changes in currentCartList and cartItem is existed in  selectedItemList => update total price
+
     if (selectedItemList) {
       const newTotalPrice = selectedItemList.reduce((value, item) => {
         value += (item.product?.price || 0) * item.quantity;
@@ -113,8 +114,42 @@ export default function CartList({ cartList = tempCart, onOrderChange }: CartLis
     }
   }, [selectedItemList]);
 
+  const deleteCartItem = (cartItem: CartItemType) => {
+    if (!cartItem.product) return;
+
+    const currentCartItemIndex = currentCartList.findIndex(
+      (item) => item.product?._id === cartItem.product?._id && cartItem.product !== null
+    );
+
+    if (currentCartItemIndex < 0) return;
+
+    const newCurrentCartList: CartItemType[] = [...currentCartList];
+    newCurrentCartList.splice(currentCartItemIndex, 1);
+
+    setCurrentCartList(newCurrentCartList);
+
+    //update in selectedItemList if cartItem is existed in selectedItemList
+    const cartItemIndex = selectedItemList.findIndex(
+      (item) => item.product?._id === cartItem.product?._id && cartItem.product !== null
+    );
+
+    console.log(cartItemIndex);
+
+    if (cartItemIndex < 0) return;
+
+    const newSelectedItemList = [...selectedItemList];
+    newSelectedItemList.splice(cartItemIndex, 1);
+
+    setSelectedItemList(newSelectedItemList);
+  };
+
   const handleChangeQty = (cartItem: CartItemType) => {
     if (!cartItem.product) return;
+
+    if (cartItem.quantity === 0) {
+      deleteCartItem(cartItem);
+      return;
+    }
 
     const currentCartItemIndex = currentCartList.findIndex(
       (item) => item.product?._id === cartItem.product?._id && cartItem.product !== null
@@ -172,6 +207,10 @@ export default function CartList({ cartList = tempCart, onOrderChange }: CartLis
     onOrderChange?.(order);
   };
 
+  const handleDeleteItem = (cartItem: CartItemType) => {
+    deleteCartItem(cartItem);
+  };
+
   return (
     <Box py={2}>
       {currentCartList.map((cartItem) => (
@@ -179,6 +218,7 @@ export default function CartList({ cartList = tempCart, onOrderChange }: CartLis
           key={cartItem.product?._id || ''}
           onClickItem={handleClickItem}
           onChangeQty={handleChangeQty}
+          onDeleteItem={handleDeleteItem}
           cartItem={cartItem}
         />
       ))}

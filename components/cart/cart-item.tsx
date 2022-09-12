@@ -9,9 +9,15 @@ export interface CartItemProps {
   cartItem: CartItemType;
   onClickItem?: Function;
   onChangeQty?: Function;
+  onDeleteItem?: Function;
 }
 
-export default function CartItem({ cartItem, onClickItem, onChangeQty }: CartItemProps) {
+export default function CartItem({
+  cartItem,
+  onClickItem,
+  onChangeQty,
+  onDeleteItem,
+}: CartItemProps) {
   const [cartItemState, setCartItemState] = useState(cartItem);
   const [qty, setQty] = useState(cartItem.quantity);
 
@@ -33,6 +39,10 @@ export default function CartItem({ cartItem, onClickItem, onChangeQty }: CartIte
 
     setCartItemState(newCartItemState);
     onChangeQty?.(newCartItemState);
+  };
+
+  const onDeleteClick = () => {
+    onDeleteItem?.(cartItem);
   };
 
   return (
@@ -125,7 +135,7 @@ export default function CartItem({ cartItem, onClickItem, onChangeQty }: CartIte
               />
             </Stack>
             <Stack direction="column" justifyContent="center">
-              <IconButton size="small">
+              <IconButton size="small" onClick={onDeleteClick}>
                 <DeleteOutlineOutlined />
               </IconButton>
             </Stack>
