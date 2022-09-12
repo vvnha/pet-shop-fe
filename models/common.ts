@@ -42,3 +42,8 @@ export type OrderItemType = {
   priceAtBuyTime: number;
   promotion: [];
 };
+
+export type OrderInputType = {
+  product_list: { product: string; quantity: number }[];
+  promotion_list: [];
+};

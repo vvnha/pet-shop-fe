@@ -10,7 +10,7 @@ export interface OrderListProps {
 const tempOrder: OrderItemType[] = [
   {
     product: {
-      id: '1',
+      _id: '1',
       name: 'Drools | 3KG',
       description: 'Adult chicken and egg Egg, Chicken 3 kg Dry Adult Dog Food',
       price: 123.0,
@@ -24,7 +24,7 @@ const tempOrder: OrderItemType[] = [
   },
   {
     product: {
-      id: '2',
+      _id: '2',
       name: 'Drools | 3KG',
       description: 'Adult chicken and egg Egg, Chicken 3 kg Dry Adult Dog Food',
       price: 123.0,
@@ -38,7 +38,7 @@ const tempOrder: OrderItemType[] = [
   },
   {
     product: {
-      id: '3',
+      _id: '3',
       name: 'Drools | 3KG',
       description: 'Adult chicken and egg Egg, Chicken 3 kg Dry Adult Dog Food',
       price: 123.0,
@@ -52,7 +52,7 @@ const tempOrder: OrderItemType[] = [
   },
   {
     product: {
-      id: '4',
+      _id: '4',
       name: 'Drools | 3KG',
       description: 'Adult chicken and egg Egg, Chicken 3 kg Dry Adult Dog Food',
       price: 123.0,
@@ -70,7 +70,7 @@ export default function OrderList({ orderList = tempOrder }: OrderListProps) {
   return (
     <Box py={2}>
       {orderList.map((orderItem) => (
-        <OrderItem key={orderItem.product?.id || ''} />
+        <OrderItem key={orderItem.product?._id || ''} orderItem={orderItem} />
       ))}
     </Box>
   );

@@ -5,15 +5,22 @@ import * as React from 'react';
 import heroImg from '@/public/food1.png';
 import { Add, Remove, DeleteOutlineOutlined } from '@mui/icons-material';
 
-export interface CartItemProps {}
+export interface CartItemProps {
+  cartItem: CartItemType;
+  onClickItem?: Function;
+}
 
-export default function CartItem(props: CartItemProps) {
+export default function CartItem({ cartItem, onClickItem }: CartItemProps) {
+  const onClickCartItem = () => {
+    onClickItem?.(cartItem);
+  };
+
   return (
     <Stack direction="column" p={1}>
       <Stack direction="row">
         <Stack direction="row" alignItems="center">
           <Stack>
-            <Checkbox onChange={() => {}} />
+            <Checkbox onChange={onClickCartItem} />
           </Stack>
           <Stack height="80px" width="80px">
             <Image
@@ -43,7 +50,7 @@ export default function CartItem(props: CartItemProps) {
               px: 1,
             }}
           >
-            Adult chicken and egg Egg, Chicken 3 kg Dry Adult Dog Food
+            {cartItem.product?.name || '--'}
           </Typography>
           <Stack direction="row" alignItems="center" py={1.5} px={1}>
             <Typography
@@ -57,7 +64,7 @@ export default function CartItem(props: CartItemProps) {
                 display: 'inline',
               }}
             >
-              $123.00
+              {`$${Number(cartItem.product?.price).toFixed(2)}`}
             </Typography>
           </Stack>
           <Stack direction="row" justifyContent="space-between">
@@ -68,7 +75,7 @@ export default function CartItem(props: CartItemProps) {
                 </IconButton>
                 <TextField
                   id="outlined-size-small"
-                  defaultValue={1}
+                  defaultValue={cartItem.quantity}
                   size="small"
                   InputProps={{
                     inputProps: {

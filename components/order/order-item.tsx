@@ -1,12 +1,24 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Stack, Checkbox, Typography, IconButton, TextField, Divider } from '@mui/material';
 import Image from 'next/image';
 import heroImg from '@/public/food1.png';
 import { Add, Remove, DeleteOutlineOutlined } from '@mui/icons-material';
+import { OrderItemType } from '@/models';
 
-export interface OrderItemProps {}
+export interface OrderItemProps {
+  orderItem: OrderItemType;
+}
 
-export default function OrderItem(props: OrderItemProps) {
+export default function OrderItem({ orderItem }: OrderItemProps) {
+  const [totalPrice, setTotalPrice] = useState(0);
+
+  useEffect(() => {
+    if (orderItem) {
+      const currentTotalPrice = orderItem.priceAtBuyTime * orderItem.quantity;
+      setTotalPrice(currentTotalPrice);
+    }
+  }, [orderItem]);
+
   return (
     <Stack direction="column" p={1}>
       <Stack direction="row">
@@ -40,7 +52,7 @@ export default function OrderItem(props: OrderItemProps) {
                 px: 1,
               }}
             >
-              Adult chicken and egg Egg, Chicken 3 kg Dry Adult Dog Food
+              {orderItem.product?.name}
             </Typography>
             <Typography
               sx={{
@@ -52,23 +64,9 @@ export default function OrderItem(props: OrderItemProps) {
                 px: 1,
               }}
             >
-              Quantity: 1 item
+              Quantity: {orderItem.quantity} item
             </Typography>
           </Stack>
-          {/* <Typography
-            sx={{
-              fontWeight: '400',
-              fontSize: '17px',
-              lineHeight: '20px',
-              flex: '1 1 auto',
-              px: 1,
-            }}
-          >
-            Adult chicken and egg Egg, Chicken 3 kg Dry Adult Dog Food
-          </Typography>
-          <Stack direction="column" justifyContent="center" p={1}>
-            <Typography>1 item</Typography>
-          </Stack> */}
 
           <Stack direction="column" alignItems="flex-end">
             <Typography
@@ -83,7 +81,7 @@ export default function OrderItem(props: OrderItemProps) {
                 flex: '1 1 auto',
               }}
             >
-              $123.00
+              {`$${orderItem.priceAtBuyTime.toFixed(2)}`}
             </Typography>
             <Typography
               sx={{
@@ -98,7 +96,7 @@ export default function OrderItem(props: OrderItemProps) {
                 pt: 0.5,
               }}
             >
-              Total: $123.00
+              Total: {`$${totalPrice.toFixed(2)}`}
             </Typography>
           </Stack>
         </Stack>
