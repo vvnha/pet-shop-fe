@@ -103,7 +103,7 @@ export default function CartList({ cartList = tempCart, onOrderChange }: CartLis
 
   useEffect(() => {
     // any changes in currentCartList and cartItem is existed in  selectedItemList => update total price
-    if (selectedItemList.length > 0) {
+    if (selectedItemList) {
       const newTotalPrice = selectedItemList.reduce((value, item) => {
         value += (item.product?.price || 0) * item.quantity;
         return value;
@@ -157,6 +157,21 @@ export default function CartList({ cartList = tempCart, onOrderChange }: CartLis
     setSelectedItemList(newSelectedItemList);
   };
 
+  const onBuyButtonClick = () => {
+    const productList = selectedItemList.map((item) => ({
+      product: item.product?._id,
+      promotion: [],
+      quantity: item.quantity,
+    }));
+
+    const order = {
+      product_list: productList,
+      promotion_list: [],
+    };
+
+    onOrderChange?.(order);
+  };
+
   return (
     <Box py={2}>
       {currentCartList.map((cartItem) => (
@@ -191,7 +206,7 @@ export default function CartList({ cartList = tempCart, onOrderChange }: CartLis
             </Typography>
           </Stack>
           <Stack>
-            <Button variant="contained" size="large">
+            <Button variant="contained" size="large" onClick={onBuyButtonClick}>
               Buy
             </Button>
           </Stack>
