@@ -141,6 +141,7 @@ export default function CartList({ cartList = tempCart, onOrderChange }: CartLis
 
     setOrder(newOrder);
     setSelectedItemList(newSelectedItemList);
+
     onOrderChange?.(order);
   };
 
