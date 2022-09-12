@@ -44,6 +44,6 @@ export type OrderItemType = {
 };
 
 export type OrderInputType = {
-  product_list: { product: string; quantity: number }[];
+  product_list: { product: string; quantity: number; promorion?: [] }[];
   promotion_list: [];
 };

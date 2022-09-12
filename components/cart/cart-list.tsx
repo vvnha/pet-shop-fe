@@ -1,6 +1,6 @@
 import { CartItemType, OrderInputType } from '@/models';
 import { BottomNavigation, Box, Button, Stack, Typography } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import CartItem from './cart-item';
 
 export interface CartListProps {
@@ -96,61 +96,74 @@ const tempCart: CartItemType[] = [
 ];
 
 export default function CartList({ cartList = tempCart, onOrderChange }: CartListProps) {
-  const [order, setOrder] = useState<OrderInputType>({
-    product_list: [],
-    promotion_list: [],
-  });
+  const [currentCartList, setCurrentCartList] = useState<CartItemType[]>(cartList);
 
   const [totalPrice, setTotalPrice] = useState(0);
   const [selectedItemList, setSelectedItemList] = useState<CartItemType[]>([]);
 
-  const handleClickItem = (cartItem: CartItemType) => {
-    const orderItemIndex = order.product_list.findIndex(
-      (orderItem) => orderItem.product === cartItem.product?._id
-    );
+  useEffect(() => {
+    // any changes in currentCartList and cartItem is existed in  selectedItemList => update total price
+    if (selectedItemList.length > 0) {
+      const newTotalPrice = selectedItemList.reduce((value, item) => {
+        value += (item.product?.price || 0) * item.quantity;
+        return value;
+      }, 0);
 
-    const selectedItemIndex = selectedItemList.findIndex(
-      (selectedItem: CartItemType) => cartItem.product?._id === selectedItem.product?._id
-    );
-
-    let newOrder = { ...order };
-    let newSelectedItemList = [...selectedItemList];
-
-    if (!cartItem.product?._id) return;
-
-    let inititalValue = 0;
-
-    if (orderItemIndex > -1) {
-      newOrder.product_list.splice(orderItemIndex, 1);
-    } else {
-      newOrder.product_list.push({ product: cartItem.product._id, quantity: cartItem.quantity });
+      setTotalPrice(newTotalPrice);
     }
+  }, [selectedItemList]);
 
-    if (selectedItemIndex > -1) {
-      newSelectedItemList.splice(selectedItemIndex, 1);
+  const handleChangeQty = (cartItem: CartItemType) => {
+    if (!cartItem.product) return;
+
+    const currentCartItemIndex = currentCartList.findIndex(
+      (item) => item.product?._id === cartItem.product?._id && cartItem.product !== null
+    );
+
+    if (currentCartItemIndex < 0) return;
+
+    const newCurrentCartList: CartItemType[] = [...currentCartList];
+    newCurrentCartList[currentCartItemIndex] = cartItem;
+
+    setCurrentCartList(newCurrentCartList);
+
+    //update in selectedItemList if cartItem is existed in selectedItemList
+    const cartItemIndex = selectedItemList.findIndex(
+      (item) => item.product?._id === cartItem.product?._id && cartItem.product !== null
+    );
+
+    if (cartItemIndex < 0) return;
+
+    const newSelectedItemList = [...selectedItemList];
+    newSelectedItemList[cartItemIndex] = cartItem;
+
+    setSelectedItemList(newSelectedItemList);
+  };
+
+  const handleClickItem = (cartItem: CartItemType) => {
+    if (!cartItem.product) return;
+
+    const cartItemIndex = selectedItemList.findIndex(
+      (item) => item.product?._id === cartItem.product?._id && cartItem.product !== null
+    );
+
+    const newSelectedItemList: CartItemType[] = [...selectedItemList];
+    //if index >= 0 remove, else => add cartItem to selectedItemList
+    if (cartItemIndex > -1) {
+      newSelectedItemList.splice(cartItemIndex, 1);
     } else {
       newSelectedItemList.push(cartItem);
     }
-
-    const totalPrice = newSelectedItemList.reduce((prevValue, selectedItem) => {
-      if (!selectedItem.product) return prevValue;
-      return prevValue + selectedItem.product.price * selectedItem.quantity;
-    }, inititalValue);
-
-    setTotalPrice(totalPrice);
-
-    setOrder(newOrder);
     setSelectedItemList(newSelectedItemList);
-
-    onOrderChange?.(order);
   };
 
   return (
     <Box py={2}>
-      {cartList.map((cartItem) => (
+      {currentCartList.map((cartItem) => (
         <CartItem
           key={cartItem.product?._id || ''}
           onClickItem={handleClickItem}
+          onChangeQty={handleChangeQty}
           cartItem={cartItem}
         />
       ))}

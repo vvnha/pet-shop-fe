@@ -1,18 +1,38 @@
 import { CartItemType } from '@/models';
 import { Box, Stack, Checkbox, Typography, IconButton, TextField, Divider } from '@mui/material';
 import Image from 'next/image';
-import * as React from 'react';
+import React, { useState } from 'react';
 import heroImg from '@/public/food1.png';
 import { Add, Remove, DeleteOutlineOutlined } from '@mui/icons-material';
 
 export interface CartItemProps {
   cartItem: CartItemType;
   onClickItem?: Function;
+  onChangeQty?: Function;
 }
 
-export default function CartItem({ cartItem, onClickItem }: CartItemProps) {
+export default function CartItem({ cartItem, onClickItem, onChangeQty }: CartItemProps) {
+  const [cartItemState, setCartItemState] = useState(cartItem);
+  const [qty, setQty] = useState(cartItem.quantity);
+
   const onClickCartItem = () => {
     onClickItem?.(cartItem);
+  };
+
+  const onIncreaseClick = () => {
+    setQty((qty) => qty + 1);
+    const newCartItemState: CartItemType = { ...cartItemState, quantity: qty + 1 };
+
+    setCartItemState(newCartItemState);
+    onChangeQty?.(newCartItemState);
+  };
+
+  const onDecreaseClick = () => {
+    setQty((qty) => qty - 1);
+    const newCartItemState: CartItemType = { ...cartItemState, quantity: qty - 1 };
+
+    setCartItemState(newCartItemState);
+    onChangeQty?.(newCartItemState);
   };
 
   return (
@@ -50,7 +70,7 @@ export default function CartItem({ cartItem, onClickItem }: CartItemProps) {
               px: 1,
             }}
           >
-            {cartItem.product?.name || '--'}
+            {cartItemState.product?.name || '--'}
           </Typography>
           <Stack direction="row" alignItems="center" py={1.5} px={1}>
             <Typography
@@ -64,18 +84,18 @@ export default function CartItem({ cartItem, onClickItem }: CartItemProps) {
                 display: 'inline',
               }}
             >
-              {`$${Number(cartItem.product?.price).toFixed(2)}`}
+              {`$${Number(cartItemState.product?.price).toFixed(2)}`}
             </Typography>
           </Stack>
           <Stack direction="row" justifyContent="space-between">
             <Stack direction="column" justifyContent="center" p={1}>
               <Stack direction="row" spacing={0.5} maxWidth="120px">
-                <IconButton size="small">
+                <IconButton size="small" onClick={onIncreaseClick}>
                   <Add />
                 </IconButton>
                 <TextField
                   id="outlined-size-small"
-                  defaultValue={cartItem.quantity}
+                  value={qty}
                   size="small"
                   InputProps={{
                     inputProps: {
@@ -90,7 +110,7 @@ export default function CartItem({ cartItem, onClickItem }: CartItemProps) {
                     height: '16px',
                   }}
                 />
-                <IconButton size="small">
+                <IconButton size="small" onClick={onDecreaseClick}>
                   <Remove />
                 </IconButton>
               </Stack>
