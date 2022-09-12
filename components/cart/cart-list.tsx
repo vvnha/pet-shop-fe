@@ -133,8 +133,6 @@ export default function CartList({ cartList = tempCart, onOrderChange }: CartLis
       (item) => item.product?._id === cartItem.product?._id && cartItem.product !== null
     );
 
-    console.log(cartItemIndex);
-
     if (cartItemIndex < 0) return;
 
     const newSelectedItemList = [...selectedItemList];
