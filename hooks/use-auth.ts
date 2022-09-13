@@ -3,6 +3,9 @@ import { authApi } from '@/services/auth';
 import useSWR from 'swr';
 import { PublicConfiguration } from 'swr/dist/types';
 import _get from 'lodash/get';
+import { User } from '@/models/user';
+import { toast } from 'react-toastify';
+import { LoginPayload } from '@/models';
 
 export function useAuth(options?: Partial<PublicConfiguration>) {
   // manage profile
@@ -17,13 +20,20 @@ export function useAuth(options?: Partial<PublicConfiguration>) {
 
   const firstLoading = profile === undefined && error === undefined;
 
-  async function login() {
-    await authApi.login({
-      email: 'abcdef@gmail.com',
-      password: '123456',
-    });
+  async function login(payload: LoginPayload) {
+    await authApi.login(payload);
 
+    toast.success('Login successfully!');
     await mutate(); // empty input mean it will trigger the profile in API to update automatically
+  }
+
+  async function register(payload: Partial<User>) {
+    const formData = new FormData();
+
+    formData.append('data', JSON.stringify(payload));
+
+    await authApi.register(formData);
+    toast.success('Register successfully!');
   }
 
   async function logout() {
@@ -38,5 +48,6 @@ export function useAuth(options?: Partial<PublicConfiguration>) {
     logout,
     firstLoading,
     isLoggedIn,
+    register,
   };
 }

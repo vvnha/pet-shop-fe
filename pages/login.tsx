@@ -2,36 +2,37 @@ import * as React from 'react';
 import { useAuth } from '@/hooks';
 import { authApi } from '@/services/auth';
 import { Box, Button, Container, Stack, TextField, Typography } from '@mui/material';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import { LoginPayload } from '@/models';
 
 // export interface LoginProps {}
 
 export default function Login() {
   const { profile, login, logout } = useAuth({ revalidateOnMount: false });
-  async function handleLoginClick() {
+  async function handleLoginClick(values: LoginPayload) {
     try {
-      await login();
+      await login(values);
       console.log('redirect to dashboard');
     } catch (error) {
       console.log('fail login', error);
     }
   }
 
-  async function handleGetProfileClick() {
-    try {
-      await authApi.getProfile();
-    } catch (error) {
-      console.log('fail get profile', error);
-    }
-  }
-
-  async function handleLogoutClick() {
-    try {
-      await logout();
-      console.log('redirect to login');
-    } catch (error) {
-      console.log('fail logout', error);
-    }
-  }
+  const formik = useFormik({
+    enableReinitialize: true,
+    initialValues: {
+      email: '',
+      password: '',
+    },
+    validationSchema: Yup.object({
+      email: Yup.string().email().required('Please fill your email!'),
+      password: Yup.string().required('Please fill your password!'),
+    }),
+    onSubmit: (values) => {
+      handleLoginClick(values);
+    },
+  });
 
   return (
     <Box>
@@ -49,13 +50,32 @@ export default function Login() {
           >
             Login
           </Typography>
-          <Stack direction="column" width="350px" spacing={1} mt={1} p={2}>
-            <TextField id="outlined-name" label="Email" />
-            <TextField id="outlined-name" label="Password" type="password" />
-            <Button variant="contained" size="large" onClick={handleLoginClick}>
-              Log in
-            </Button>
-          </Stack>
+          <form onSubmit={formik.handleSubmit}>
+            <Stack direction="column" width="350px" spacing={1} mt={1} p={2}>
+              <TextField
+                id="outlined-name"
+                label="Email"
+                name="email"
+                onChange={formik.handleChange}
+                value={formik.values.email}
+                error={Boolean(formik.errors.email)}
+                helperText={formik.errors.email}
+              />
+              <TextField
+                id="outlined-name"
+                label="Password"
+                type="password"
+                name="password"
+                onChange={formik.handleChange}
+                value={formik.values.password}
+                error={Boolean(formik.errors.password)}
+                helperText={formik.errors.password}
+              />
+              <Button variant="contained" type="submit" size="large">
+                Log in
+              </Button>
+            </Stack>
+          </form>
         </Stack>
       </Container>
     </Box>

@@ -7,6 +7,8 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/styles';
 import { SWRConfig } from 'swr';
 import '../styles/globals.css';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -29,6 +31,7 @@ function MyApp({
           }}
         >
           <Layout>
+            <ToastContainer />
             <Component {...pageProps} />
           </Layout>
         </SWRConfig>
