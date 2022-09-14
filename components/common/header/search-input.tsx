@@ -1,8 +1,33 @@
 import { Search } from '@mui/icons-material';
 import { Box, Button, IconButton, Input, Stack, TextField } from '@mui/material';
-import * as React from 'react';
+import { useRouter } from 'next/router';
+import React, { useState } from 'react';
 
 export function SearchInput() {
+  const [text, setText] = useState('');
+  const router = useRouter();
+
+  const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setText(e.target.value);
+  };
+
+  const onSearchClick = () => {
+    if (text.length < 1) return;
+
+    router.push(
+      {
+        pathname: '/search',
+        query: {
+          text: text,
+          _page: 1,
+          _limit: 8,
+        },
+      },
+      undefined,
+      { shallow: true }
+    );
+  };
+
   return (
     <Stack
       direction="row"
@@ -32,9 +57,10 @@ export function SearchInput() {
           fontSize: '13px',
           width: '100%',
         }}
+        onChange={handleChangeInput}
       />
 
-      <Button variant="contained">
+      <Button variant="contained" onClick={onSearchClick}>
         <Search fontSize="small" />
       </Button>
     </Stack>

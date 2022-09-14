@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -9,7 +9,8 @@ import { Box, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/mater
 
 export interface PetRadioButtonProps {
   groupLabel?: string;
-  optionList?: [];
+  optionList?: Pet[];
+  onAnmialTypeChange?: Function;
 }
 
 const temp: Pet[] = [
@@ -36,13 +37,35 @@ const temp: Pet[] = [
 ];
 
 export default function PetRadioButton(props: PetRadioButtonProps) {
-  const { groupLabel = 'Gender', optionList = temp } = props;
+  const { groupLabel = 'Gender', optionList = temp, onAnmialTypeChange } = props;
 
-  const [animal, setAnimal] = React.useState('Default');
+  const [petList, setPetList] = useState<Pet[]>([
+    {
+      name: 'default',
+      _id: 'default',
+      description: 'ABC',
+    },
+  ]);
+
+  const [animal, setAnimal] = useState('default');
 
   const handleChange = (event: SelectChangeEvent) => {
     setAnimal(event.target.value as string);
+    onAnmialTypeChange?.(event.target.value as string);
   };
+
+  useEffect(() => {
+    if (optionList.length > 0) {
+      setPetList([
+        {
+          name: 'default',
+          _id: 'default',
+          description: 'ABC',
+        },
+        ...optionList,
+      ]);
+    }
+  }, [optionList]);
 
   return (
     <Box sx={{ minWidth: 120 }}>
@@ -55,7 +78,7 @@ export default function PetRadioButton(props: PetRadioButtonProps) {
           label={groupLabel}
           onChange={handleChange}
         >
-          {optionList.map((option) => (
+          {petList.map((option) => (
             <MenuItem key={option._id} value={option._id}>
               {option.name}
             </MenuItem>

@@ -3,10 +3,21 @@ import React, { useState } from 'react';
 import PetRadioButton from './pet-radio';
 import PriceFilter from './price-filter';
 import { ArrowUpwardOutlined, ArrowDownwardOutlined } from '@mui/icons-material';
-export interface FilterProps {}
+import { Pet } from '@/models';
+export interface FilterProps {
+  petList?: Pet[];
+}
 
-export default function Filter(props: FilterProps) {
+export default function Filter({ petList = [] }: FilterProps) {
   const [sortType, setSortType] = useState('desc');
+
+  const handleFilterPrice = (priceFilter: any) => {
+    console.log(priceFilter);
+  };
+
+  const handleAnmialTypeChange = (pet: string) => {
+    console.log(pet);
+  };
 
   const SortIcon =
     sortType === 'desc' ? (
@@ -24,7 +35,11 @@ export default function Filter(props: FilterProps) {
   return (
     <Stack p={1}>
       <Stack direction="column">
-        <PetRadioButton groupLabel="Animals" />
+        <PetRadioButton
+          groupLabel="Animals"
+          optionList={petList}
+          onAnmialTypeChange={handleAnmialTypeChange}
+        />
       </Stack>
       <Stack direction="column">
         <Typography pr={2} color="#979697" mt={1}>
@@ -42,7 +57,7 @@ export default function Filter(props: FilterProps) {
         </Button>
       </Stack>
       <Stack direction="column" mt={2}>
-        <PriceFilter />
+        <PriceFilter onFilterPrice={handleFilterPrice} />
       </Stack>
     </Stack>
   );
