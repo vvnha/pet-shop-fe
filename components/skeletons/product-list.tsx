@@ -33,18 +33,11 @@ export default function ProductListSkeleton({ productsPerRow = 4 }: ProductListS
           />
         </Box>
         <Grid container spacing={2}>
-          <Grid item md={productNumber}>
-            <ProductSkeleton />
-          </Grid>
-          <Grid item md={productNumber}>
-            <ProductSkeleton />
-          </Grid>
-          <Grid item md={productNumber}>
-            <ProductSkeleton />
-          </Grid>
-          <Grid item md={productNumber}>
-            <ProductSkeleton />
-          </Grid>
+          {Array.from(new Array(4)).map((item, index) => (
+            <Grid key={index} item md={productNumber}>
+              <ProductSkeleton />
+            </Grid>
+          ))}
         </Grid>
       </Container>
     </Box>
