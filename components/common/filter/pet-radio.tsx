@@ -15,22 +15,22 @@ export interface PetRadioButtonProps {
 const temp: Pet[] = [
   {
     name: 'Default',
-    id: 'Default',
+    _id: 'Default',
     description: 'ABC',
   },
   {
     name: 'Cat',
-    id: '1',
+    _id: '1',
     description: 'ABC',
   },
   {
     name: 'Dog',
-    id: '2',
+    _id: '2',
     description: 'ABC',
   },
   {
     name: 'Rabbit',
-    id: '3',
+    _id: '3',
     description: 'ABC',
   },
 ];
@@ -56,7 +56,7 @@ export default function PetRadioButton(props: PetRadioButtonProps) {
           onChange={handleChange}
         >
           {optionList.map((option) => (
-            <MenuItem key={option.id} value={option.id}>
+            <MenuItem key={option._id} value={option._id}>
               {option.name}
             </MenuItem>
           ))}
