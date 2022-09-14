@@ -3,10 +3,13 @@ import Image from 'next/image';
 import * as React from 'react';
 import heroImg from '@/public/food1.png';
 import { Add, Remove } from '@mui/icons-material';
+import { Product } from '@/models';
 
-export interface ProductDetailProps {}
+export interface ProductDetailProps {
+  product: Product;
+}
 
-export function ProductDetail(props: ProductDetailProps) {
+export function ProductDetail({ product }: ProductDetailProps) {
   return (
     <Stack
       direction={{
@@ -144,16 +147,16 @@ export function ProductDetail(props: ProductDetailProps) {
               lineHeight: '33px',
             }}
           >
-            Drools | 3KG
+            {product.name}
           </Typography>
         </Stack>
 
         <Stack flexGrow={0.5}>
           <Stack direction="row" alignItems="center" mt={1.5}>
-            <Typography pr={2} color="#979697">
-              Animals:
-            </Typography>
-            <Chip label="Dog" color="primary" size="small" />
+            <Typography color="#979697">Animals:</Typography>
+            {product.pet_list.map((item) => (
+              <Chip key={item._id} label={item.name} color="primary" size="small" sx={{ ml: 1 }} />
+            ))}
           </Stack>
 
           <Stack direction="row" mt={1.5}>
@@ -169,7 +172,7 @@ export function ProductDetail(props: ProductDetailProps) {
                 lineHeight: '20px',
               }}
             >
-              Adult chicken and egg Egg, Chicken 3 kg Dry Adult Dog Food
+              {product.description}
             </Typography>
           </Stack>
 
@@ -191,7 +194,7 @@ export function ProductDetail(props: ProductDetailProps) {
                 pr: 3,
               }}
             >
-              $123.00
+              {`$${product.price}`}
             </Typography>
           </Stack>
           <Stack direction="column" mt={2}>

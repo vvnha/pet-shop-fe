@@ -5,19 +5,7 @@ export interface Product {
   name: string;
   description: string;
   price: number;
-  pet_list:
-    | [
-        {
-          pet: Pet | null;
-        }
-      ]
-    | [];
-  promotion_list?:
-    | [
-        {
-          promotion: string;
-        }
-      ]
-    | [];
+  pet_list: Pet[];
+  promotion_list?: string[];
   image_list: string[];
 }

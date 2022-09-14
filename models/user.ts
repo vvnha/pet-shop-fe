@@ -9,12 +9,8 @@ export interface User {
   confirm_password?: string;
   role?: string;
   avatar_image?: string;
-  cart?:
-    | [
-        {
-          product: Product | null;
-          quantity: number;
-        }
-      ]
-    | [];
+  cart?: {
+    product: Product | null;
+    quantity: number;
+  }[];
 }

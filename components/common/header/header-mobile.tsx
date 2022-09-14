@@ -67,7 +67,7 @@ export default function HeaderMobile({ isLoggedIn, logOutClick = undefined }: He
               {!isLoggedIn ? (
                 <Box>
                   <Link href="/login" passHref>
-                    <MuiLink>Login / Signup</MuiLink>
+                    <MuiLink color="primary.main">Login / Signup</MuiLink>
                   </Link>
                 </Box>
               ) : (

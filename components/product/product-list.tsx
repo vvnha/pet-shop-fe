@@ -10,7 +10,7 @@ export interface ProductListProps {
 
 const tempProductList: Product[] = [
   {
-    id: '1',
+    _id: '1',
     name: 'Drools | 3KG',
     description: 'Adult chicken and egg Egg, Chicken 3 kg Dry Adult Dog Food',
     price: 123.0,
@@ -19,7 +19,16 @@ const tempProductList: Product[] = [
     image_list: [],
   },
   {
-    id: '2',
+    _id: '2',
+    name: 'Drools 1 | 3KG',
+    description: 'Adult chicken and egg Egg, Chicken 3 kg Dry Adult Dog Food',
+    price: 123.0,
+    pet_list: [],
+    promotion_list: [],
+    image_list: [],
+  },
+  {
+    _id: '3',
     name: 'Drools | 3KG',
     description: 'Adult chicken and egg Egg, Chicken 3 kg Dry Adult Dog Food',
     price: 123.0,
@@ -28,16 +37,7 @@ const tempProductList: Product[] = [
     image_list: [],
   },
   {
-    id: '3',
-    name: 'Drools | 3KG',
-    description: 'Adult chicken and egg Egg, Chicken 3 kg Dry Adult Dog Food',
-    price: 123.0,
-    pet_list: [],
-    promotion_list: [],
-    image_list: [],
-  },
-  {
-    id: '4',
+    _id: '4',
     name: 'Drools | 3KG',
     description: 'Adult chicken and egg Egg, Chicken 3 kg Dry Adult Dog Food',
     price: 123.0,
@@ -56,8 +56,8 @@ export function ProductList({
   return (
     <Grid container spacing={2}>
       {productList.map((product) => (
-        <Grid key={product.id} item md={productNumber}>
-          <ProductItem />
+        <Grid key={product._id} item md={productNumber}>
+          <ProductItem product={product} />
         </Grid>
       ))}
     </Grid>

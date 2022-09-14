@@ -2,14 +2,18 @@ import { Box, Button, Chip, Typography } from '@mui/material';
 import Image from 'next/image';
 import * as React from 'react';
 import heroImg from '@/public/food1.png';
+import { Product } from '@/models';
 
-export interface ProductProps {}
+export interface ProductProps {
+  product: Product;
+}
 
-export function Product(props: ProductProps) {
+export function Product({ product }: ProductProps) {
   return (
     <Box
       maxWidth="300px"
       p={3}
+      height="625px"
       borderRadius="7px"
       boxShadow="hsla(240,5%,41%,.2) 0px 7px 29px 0px;"
     >
@@ -30,11 +34,15 @@ export function Product(props: ProductProps) {
             fontFamily: 'Rubik',
             fontWeight: '400',
             fontStyle: 'normal',
-            fontSize: '28px',
-            lineHeight: '33px',
+            fontSize: '20px',
+            lineHeight: '16px',
+            display: '-webkit-box',
+            WebkitLineClamp: 1,
+            WebkitBoxOrient: 'vertical',
+            overflow: 'hidden',
           }}
         >
-          Drools | 3KG
+          {product.name}
         </Typography>
         <Chip
           label="Dog"
@@ -47,15 +55,20 @@ export function Product(props: ProductProps) {
         <Typography
           sx={{
             mt: 1.5,
+            height: '80px',
             fontFamily: 'Rubik',
             fontWeight: '400',
             fontStyle: 'normal',
             fontSize: '18px',
             lineHeight: '20px',
             color: '#979697',
+            display: '-webkit-box',
+            WebkitLineClamp: 4,
+            WebkitBoxOrient: 'vertical',
+            overflow: 'hidden',
           }}
         >
-          Adult chicken and egg Egg, Chicken 3 kg Dry Adult Dog Food
+          {product.description}
         </Typography>
         <Box mt={1.5}>
           <Typography
@@ -72,7 +85,7 @@ export function Product(props: ProductProps) {
               pr: 3,
             }}
           >
-            $123.00
+            {`$${Number(product.price).toFixed(2)}`}
           </Typography>
         </Box>
       </Box>
