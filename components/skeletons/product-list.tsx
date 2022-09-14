@@ -4,9 +4,13 @@ import ProductSkeleton from './product';
 
 export interface ProductListSkeletonProps {
   productsPerRow?: number;
+  totalNumber?: number;
 }
 
-export default function ProductListSkeleton({ productsPerRow = 4 }: ProductListSkeletonProps) {
+export default function ProductListSkeleton({
+  productsPerRow = 4,
+  totalNumber = 4,
+}: ProductListSkeletonProps) {
   const productNumber = 12 / productsPerRow;
 
   return (
@@ -33,7 +37,7 @@ export default function ProductListSkeleton({ productsPerRow = 4 }: ProductListS
           />
         </Box>
         <Grid container spacing={2}>
-          {Array.from(new Array(4)).map((item, index) => (
+          {Array.from(new Array(totalNumber)).map((item, index) => (
             <Grid key={index} item md={productNumber}>
               <ProductSkeleton />
             </Grid>

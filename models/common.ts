@@ -47,3 +47,11 @@ export type OrderInputType = {
   product_list: { product: string; quantity: number; promorion?: [] }[];
   promotion_list: [];
 };
+
+export type FilterType = {
+  text: string;
+  minPrice?: number;
+  maxPrice?: number;
+  pet?: string;
+  sortType?: string;
+};

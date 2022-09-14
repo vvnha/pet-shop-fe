@@ -1,11 +1,17 @@
 import { Search } from '@mui/icons-material';
 import { Box, Button, IconButton, Input, Stack, TextField } from '@mui/material';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 export function SearchInput() {
-  const [text, setText] = useState('');
   const router = useRouter();
+  const [text, setText] = useState<string>('');
+
+  useEffect(() => {
+    const text = router.query?.text?.toString() || '';
+
+    setText(text);
+  }, [router]);
 
   const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setText(e.target.value);
@@ -57,6 +63,7 @@ export function SearchInput() {
           fontSize: '13px',
           width: '100%',
         }}
+        value={text}
         onChange={handleChangeInput}
       />
 

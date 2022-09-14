@@ -7,6 +7,10 @@ import { Box, Container, Drawer, IconButton, Pagination, Stack, Typography } fro
 import React, { useEffect, useState } from 'react';
 import useSWR from 'swr';
 import _get from 'lodash/get';
+import { FilterType } from '@/models';
+import { useRouter } from 'next/router';
+import { useSearch } from '@/hooks';
+import ProductListSkeleton from '@/components/skeletons/product-list';
 
 export interface SearchPageProps {}
 type Anchor = 'top' | 'left' | 'bottom' | 'right';
@@ -17,16 +21,31 @@ export default function SearchPage(props: SearchPageProps) {
     bottom: false,
     right: false,
   });
+  const router = useRouter();
   const [petList, setPetList] = useState([]);
+  const [productList, setProductList] = useState([]);
 
   const petSearchParams = new URLSearchParams();
   petSearchParams.append('_page', '1');
   petSearchParams.append('_limit', '100');
 
+  const page = router.query?._page;
+  const limit = router.query?._limit;
+  const text = router.query?.text || '';
+
   const { data, error, mutate, isValidating } = useSWR(`/pets?${petSearchParams.toString()}`, {
     dedupingInterval: MS_PER_HOUR,
     revalidateOnFocus: false,
   });
+
+  const { searchData, isLoading } = useSearch({ filters: router.query });
+
+  useEffect(() => {
+    if (searchData) {
+      const productItemList = _get(searchData, 'values', []);
+      setProductList(productItemList);
+    }
+  }, [searchData]);
 
   useEffect(() => {
     if (data?.values) {
@@ -46,6 +65,22 @@ export default function SearchPage(props: SearchPageProps) {
 
       setState({ ...state, [anchor]: open });
     };
+
+  const handleFilterChange = (filter: FilterType) => {
+    router.push(
+      {
+        pathname: '/search',
+        query: {
+          ...filter,
+          text,
+          _page: Number(page) || 1,
+          _limit: Number(limit) || 4,
+        },
+      },
+      undefined,
+      { shallow: true }
+    );
+  };
 
   return (
     <Box>
@@ -72,9 +107,9 @@ export default function SearchPage(props: SearchPageProps) {
             >
               Filters
             </Typography>
-            <Filter petList={petList} />
+            <Filter petList={petList} onFilterChange={handleFilterChange} />
           </Stack>
-          <Stack>
+          <Stack flexGrow={1}>
             <Stack
               display={{
                 xs: 'block',
@@ -91,7 +126,11 @@ export default function SearchPage(props: SearchPageProps) {
               </Stack>
             </Stack>
             <Stack justifyContent="center" p={4}>
-              <ProductList productsPerRow={3} />
+              {isLoading ? (
+                <ProductListSkeleton productsPerRow={3} totalNumber={6} />
+              ) : (
+                <ProductList productList={productList} productsPerRow={3} />
+              )}
               <Pagination
                 sx={{
                   margin: 'auto',
@@ -118,7 +157,7 @@ export default function SearchPage(props: SearchPageProps) {
                 Filters
               </Typography>
             </IconButton>
-            <Filter petList={petList} />
+            <Filter petList={petList} onFilterChange={handleFilterChange} />
           </Drawer>
         </Stack>
       </Container>

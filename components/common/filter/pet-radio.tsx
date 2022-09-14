@@ -4,13 +4,14 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
-import { Pet } from '@/models';
+import { FilterType, Pet } from '@/models';
 import { Box, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 
 export interface PetRadioButtonProps {
   groupLabel?: string;
   optionList?: Pet[];
   onAnmialTypeChange?: Function;
+  filters: FilterType;
 }
 
 const temp: Pet[] = [
@@ -37,13 +38,13 @@ const temp: Pet[] = [
 ];
 
 export default function PetRadioButton(props: PetRadioButtonProps) {
-  const { groupLabel = 'Gender', optionList = temp, onAnmialTypeChange } = props;
+  const { groupLabel = 'Gender', optionList = temp, onAnmialTypeChange, filters } = props;
 
   const [petList, setPetList] = useState<Pet[]>([
     {
       name: 'default',
       _id: 'default',
-      description: 'ABC',
+      description: 'default',
     },
   ]);
 
@@ -66,6 +67,12 @@ export default function PetRadioButton(props: PetRadioButtonProps) {
       ]);
     }
   }, [optionList]);
+
+  useEffect(() => {
+    if (filters.pet && filters.pet !== '') {
+      setAnimal(filters.pet);
+    }
+  }, [filters]);
 
   return (
     <Box sx={{ minWidth: 120 }}>

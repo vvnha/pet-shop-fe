@@ -2,21 +2,24 @@ import { Button, Divider, Stack, TextField, Typography } from '@mui/material';
 import React from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { FilterType } from '@/models';
+import _get from 'lodash/get';
 
 export interface PriceFilterProps {
   onFilterPrice?: Function;
+  filters: FilterType;
 }
 
-export default function PriceFilter({ onFilterPrice }: PriceFilterProps) {
+export default function PriceFilter({ onFilterPrice, filters }: PriceFilterProps) {
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      minPrice: '',
-      maxPrice: '',
+      minPrice: _get(filters, 'minPrice', 0),
+      maxPrice: _get(filters, 'maxPrice', 100000000),
     },
     validationSchema: Yup.object({
-      minPrice: Yup.string().optional(),
-      maxPrice: Yup.string().optional(),
+      minPrice: Yup.number().optional(),
+      maxPrice: Yup.number().optional(),
     }),
     onSubmit: (values) => {
       onFilterPrice?.(values);
@@ -32,10 +35,9 @@ export default function PriceFilter({ onFilterPrice }: PriceFilterProps) {
         <Stack direction="row">
           <TextField
             id="outlined-size-small"
-            // defaultValue="0"
             size="small"
             InputProps={{ inputProps: { min: 0 } }}
-            // type="number"
+            type="number"
             sx={{
               mr: 1,
               width: '100px',
@@ -54,10 +56,9 @@ export default function PriceFilter({ onFilterPrice }: PriceFilterProps) {
           />
           <TextField
             id="outlined-size-small"
-            // defaultValue="0"
             size="small"
             InputProps={{ inputProps: { min: 0 } }}
-            // type="number"
+            type="number"
             sx={{
               ml: 1,
               width: '100px',
