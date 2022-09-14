@@ -1,4 +1,4 @@
-import { Box, Button, Chip, Typography } from '@mui/material';
+import { Box, Button, Chip, Stack, Typography } from '@mui/material';
 import Image from 'next/image';
 import * as React from 'react';
 import heroImg from '@/public/food1.png';
@@ -44,14 +44,11 @@ export function Product({ product }: ProductProps) {
         >
           {product.name}
         </Typography>
-        <Chip
-          label="Dog"
-          color="primary"
-          size="small"
-          sx={{
-            mt: 2,
-          }}
-        />
+        <Stack direction="row" alignItems="center" mt={2}>
+          {product.pet_list.map((item) => (
+            <Chip key={item._id} label={item.name} color="primary" size="small" sx={{ ml: 1 }} />
+          ))}
+        </Stack>
         <Typography
           sx={{
             mt: 1.5,

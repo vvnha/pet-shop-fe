@@ -27,22 +27,13 @@ const Home: NextPageWithLayout = () => {
 
   useEffect(() => {
     (async () => {
-      if (!page) {
-        router.push(
-          {
-            pathname: '/',
-            query: {
-              _page: 1,
-              _limit: 4,
-            },
-          },
-          undefined,
-          { shallow: true }
-        );
-      }
+      if (!page) return;
 
       try {
-        const response = await productApi.getProductList(router.query);
+        const response = await productApi.getProductList({
+          _page: page,
+          _limit: limit,
+        });
 
         const data = _get(response, 'values', []);
         const responsePagination = _get(response, 'pagination', {
