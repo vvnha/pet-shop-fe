@@ -1,18 +1,13 @@
 import Hero from '@/components/home/hero';
 import { MainLayout } from '@/components/layouts';
 import { ProductsSection } from '@/components/product';
+import ProductListSkeleton from '@/components/skeletons/product-list';
 import { ApiResponseData, NextPageWithLayout, Product } from '@/models';
 import { productApi } from '@/services/products';
-import { Box, Skeleton } from '@mui/material';
-import type { NextPage } from 'next';
-import Head from 'next/head';
-import Image from 'next/image';
-import { useEffect, useState } from 'react';
-import styles from '../styles/Home.module.css';
+import { Box } from '@mui/material';
 import _get from 'lodash/get';
 import { useRouter } from 'next/router';
-import ProductSkeleton from '@/components/skeletons/product';
-import ProductListSkeleton from '@/components/skeletons/product-list';
+import { useEffect, useState } from 'react';
 
 const Home: NextPageWithLayout = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -30,14 +25,26 @@ const Home: NextPageWithLayout = () => {
 
   useEffect(() => {
     (async () => {
-      if (!page) return;
+      if (!page) {
+        router.push(
+          {
+            pathname: '/',
+            query: {
+              _page: Number(page) || 1,
+              _limit: Number(limit) || 4,
+            },
+          },
+          undefined,
+          { shallow: true }
+        );
+      }
 
       try {
         setIsLoading(true);
 
         const response = await productApi.getProductList({
-          _page: page,
-          _limit: limit,
+          _page: Number(page) || 1,
+          _limit: Number(limit) || 4,
         });
 
         const data = _get(response, 'values', []);
