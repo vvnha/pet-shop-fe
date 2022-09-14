@@ -18,7 +18,8 @@ export function ProductsSection({
 
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
-    onChangePagination?.(page);
+
+    onChangePagination?.(value);
   };
 
   return (
