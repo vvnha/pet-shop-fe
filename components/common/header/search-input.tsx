@@ -26,7 +26,7 @@ export function SearchInput() {
         query: {
           text: text,
           _page: 1,
-          _limit: 8,
+          _limit: 6,
         },
       },
       undefined,

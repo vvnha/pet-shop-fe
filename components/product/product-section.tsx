@@ -1,6 +1,7 @@
 import { ApiResponseData, Product } from '@/models';
 import { Box, Container, Divider, Pagination, Stack, Typography } from '@mui/material';
 import React, { useState } from 'react';
+import PaginationComponent from './pagination';
 import { ProductList } from './product-list';
 
 export interface ProductsSectionProps {
@@ -15,12 +16,6 @@ export function ProductsSection({
   onChangePagination,
 }: ProductsSectionProps) {
   const [page, setPage] = useState(pagination?._page || 1);
-
-  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
-    setPage(value);
-
-    onChangePagination?.(value);
-  };
 
   return (
     <Box>
@@ -47,15 +42,10 @@ export function ProductsSection({
         </Box>
         <ProductList productList={productList} />
         <Stack justifyContent="center" p={4}>
-          <Pagination
-            sx={{
-              margin: 'auto',
-              fontFamily: 'Rubik',
-            }}
+          <PaginationComponent
             count={Math.ceil((pagination?._totalRows || 1) / (pagination?._limit || 1))}
-            color="primary"
-            page={page}
-            onChange={handleChange}
+            currentPage={page}
+            onChangePagination={onChangePagination}
           />
         </Stack>
       </Container>

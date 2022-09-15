@@ -7,10 +7,11 @@ import { Box, Container, Drawer, IconButton, Pagination, Stack, Typography } fro
 import React, { useEffect, useState } from 'react';
 import useSWR from 'swr';
 import _get from 'lodash/get';
-import { FilterType } from '@/models';
+import { ApiResponseData, FilterType, Product } from '@/models';
 import { useRouter } from 'next/router';
 import { useSearch } from '@/hooks';
 import ProductListSkeleton from '@/components/skeletons/product-list';
+import PaginationComponent from '@/components/product/pagination';
 
 export interface SearchPageProps {}
 type Anchor = 'top' | 'left' | 'bottom' | 'right';
@@ -23,7 +24,12 @@ export default function SearchPage(props: SearchPageProps) {
   });
   const router = useRouter();
   const [petList, setPetList] = useState([]);
-  const [productList, setProductList] = useState([]);
+  const [productList, setProductList] = useState<Product[]>([]);
+  const [pagination, setPagination] = useState<ApiResponseData<Product>['pagination']>({
+    _totalRows: 0,
+    _page: 1,
+    _limit: 4,
+  });
 
   const petSearchParams = new URLSearchParams();
   petSearchParams.append('_page', '1');
@@ -41,9 +47,30 @@ export default function SearchPage(props: SearchPageProps) {
   const { searchData, isLoading } = useSearch({ filters: router.query });
 
   useEffect(() => {
+    if (router.query?.sortType && productList && productList.length > 0) {
+      const newArray: Product[] = [...productList];
+
+      if (router.query?.sortType === 'incre') {
+        newArray.sort((item1, item2) => item1.price - item2.price);
+      } else {
+        newArray.sort((item1, item2) => item2.price - item1.price);
+      }
+
+      setProductList(newArray);
+    }
+  }, [router]);
+
+  useEffect(() => {
     if (searchData) {
       const productItemList = _get(searchData, 'values', []);
+      const productItemPagination = _get(searchData, 'pagination', {
+        _totalRows: 0,
+        _page: 1,
+        _limit: 4,
+      });
+
       setProductList(productItemList);
+      setPagination(productItemPagination);
     }
   }, [searchData]);
 
@@ -75,6 +102,22 @@ export default function SearchPage(props: SearchPageProps) {
           text,
           _page: Number(page) || 1,
           _limit: Number(limit) || 4,
+        },
+      },
+      undefined,
+      { shallow: true }
+    );
+  };
+
+  const handleChangePagination = (page: number) => {
+    router.push(
+      {
+        pathname: '/search',
+        query: {
+          ...router.query,
+          text,
+          _page: Number(page) || 1,
+          _limit: Number(limit) || 6,
         },
       },
       undefined,
@@ -131,14 +174,10 @@ export default function SearchPage(props: SearchPageProps) {
               ) : (
                 <ProductList productList={productList} productsPerRow={3} />
               )}
-              <Pagination
-                sx={{
-                  margin: 'auto',
-                  pt: 2,
-                  fontFamily: 'Rubik',
-                }}
-                count={3}
-                color="primary"
+              <PaginationComponent
+                count={Math.ceil((pagination?._totalRows || 1) / (pagination?._limit || 1))}
+                currentPage={Number(page) || 1}
+                onChangePagination={handleChangePagination}
               />
             </Stack>
           </Stack>
