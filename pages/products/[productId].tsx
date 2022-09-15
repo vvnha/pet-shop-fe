@@ -10,6 +10,7 @@ import { useAuth } from '@/hooks';
 import { User } from '@/models/user';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/router';
+import ProductDetailSkeleton from '@/components/skeletons/product-detail';
 
 export interface ProductPageProps {
   product: Product;
@@ -37,7 +38,13 @@ function ProductPage({ product = temProduct }: ProductPageProps) {
   const { isLoggedIn, profile, updateUser } = useAuth();
 
   if (router.isFallback) {
-    return <Box>Loading...</Box>;
+    return (
+      <Box>
+        <Container>
+          <ProductDetailSkeleton />
+        </Container>
+      </Box>
+    );
   }
 
   const handleAddToCart = async (cartItem: CartItemInputType) => {
