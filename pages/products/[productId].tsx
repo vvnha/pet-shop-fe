@@ -48,6 +48,8 @@ function ProductPage({ product = temProduct }: ProductPageProps) {
   }
 
   const handleAddToCart = async (cartItem: CartItemInputType) => {
+    if (!isLoggedIn) router.push('/login');
+
     const cloneProfile: Required<User> = { ...profile };
 
     const itemIndex = cloneProfile.cart.findIndex((item) => item.product?._id === cartItem.product);

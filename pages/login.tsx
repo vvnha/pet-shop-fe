@@ -5,15 +5,17 @@ import { Box, Button, Container, Stack, TextField, Typography } from '@mui/mater
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { LoginPayload } from '@/models';
+import { useRouter } from 'next/router';
 
 // export interface LoginProps {}
 
 export default function Login() {
+  const router = useRouter();
   const { profile, login, logout } = useAuth({ revalidateOnMount: false });
   async function handleLoginClick(values: LoginPayload) {
     try {
       await login(values);
-      console.log('redirect to dashboard');
+      router.back();
     } catch (error) {
       console.log('fail login', error);
     }
