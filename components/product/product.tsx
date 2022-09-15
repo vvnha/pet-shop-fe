@@ -3,12 +3,19 @@ import Image from 'next/image';
 import * as React from 'react';
 import heroImg from '@/public/food1.png';
 import { Product } from '@/models';
+import { useRouter } from 'next/router';
 
 export interface ProductProps {
   product: Product;
 }
 
 export function Product({ product }: ProductProps) {
+  const router = useRouter();
+
+  const handDetailClick = () => {
+    router.push(`/products/${product._id}`);
+  };
+
   return (
     <Box
       maxWidth="300px"
@@ -92,6 +99,7 @@ export function Product({ product }: ProductProps) {
         }}
         variant="outlined"
         size="medium"
+        onClick={handDetailClick}
       >
         Buy Now
       </Button>

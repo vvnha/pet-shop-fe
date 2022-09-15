@@ -60,7 +60,7 @@ export default function QuantityComponent({ initialQty = 1, onChangeQty }: Quant
   }
 
   return (
-    <Stack direction="row" spacing={0.5} maxWidth="120px">
+    <Stack direction="row" spacing={0.5} mt={1} maxWidth="120px">
       <IconButton size="small" onClick={onIncreaseClick}>
         <Add />
       </IconButton>

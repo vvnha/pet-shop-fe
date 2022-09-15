@@ -41,6 +41,14 @@ export function useAuth(options?: Partial<PublicConfiguration>) {
     mutate({}, false); // false mean shouldReavalidate : false
   }
 
+  async function updateUser(payload: any) {
+    const formData = new FormData();
+    formData.append('data', JSON.stringify(payload));
+
+    await authApi.addToCart(profile._id, formData);
+    await mutate();
+  }
+
   return {
     profile,
     error,
@@ -49,5 +57,6 @@ export function useAuth(options?: Partial<PublicConfiguration>) {
     firstLoading,
     isLoggedIn,
     register,
+    updateUser,
   };
 }

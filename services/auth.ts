@@ -15,4 +15,7 @@ export const authApi = {
   register(payload: any) {
     return axiosClient.postForm('/users', payload);
   },
+  addToCart(userId: string, payload: any) {
+    return axiosClient.patchForm(`/users/${userId}`, payload);
+  },
 };

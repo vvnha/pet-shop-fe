@@ -36,6 +36,11 @@ export type CartItemType = {
   quantity: number;
 };
 
+export type CartItemInputType = {
+  product: string;
+  quantity: number;
+};
+
 export type OrderItemType = {
   product: Product | null;
   quantity: number;

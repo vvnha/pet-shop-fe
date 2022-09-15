@@ -2,10 +2,13 @@ import { Box, Container, Stack } from '@mui/material';
 import * as React from 'react';
 import { MainLayout } from '@/components/layouts';
 import { ProductDetail } from '@/components/product/product-detail';
-import { Product } from '@/models';
+import { CartItemInputType, CartItemType, Product } from '@/models';
 import { GetStaticPaths, GetStaticProps, GetStaticPropsContext } from 'next';
 import { productApi } from '@/services/products';
 import _get from 'lodash/get';
+import { useAuth } from '@/hooks';
+import { User } from '@/models/user';
+import { toast } from 'react-toastify';
 
 export interface ProductPageProps {
   product: Product;
@@ -29,10 +32,39 @@ const temProduct: Product = {
 };
 
 function ProductPage({ product = temProduct }: ProductPageProps) {
+  const { isLoggedIn, profile, updateUser } = useAuth();
+
+  const handleAddToCart = async (cartItem: CartItemInputType) => {
+    const cloneProfile: Required<User> = { ...profile };
+
+    const itemIndex = cloneProfile.cart.findIndex((item) => item.product?._id === cartItem.product);
+    let newCart = cloneProfile.cart.map((item) => ({
+      product: item.product?._id,
+      quantity: item.quantity,
+    }));
+
+    if (itemIndex > -1) {
+      newCart[itemIndex].quantity += cartItem.quantity;
+    } else {
+      newCart.push(cartItem);
+    }
+
+    const payload = {
+      cart: newCart,
+    };
+
+    try {
+      await updateUser(payload);
+      toast.success('Add to cart successfully!');
+    } catch (error) {
+      toast.error((error as Error).message);
+    }
+  };
+
   return (
     <Box>
       <Container>
-        <ProductDetail product={product} />
+        <ProductDetail product={product} onAddToCart={handleAddToCart} />
       </Container>
     </Box>
   );

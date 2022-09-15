@@ -8,13 +8,23 @@ import QuantityComponent from '../cart/quantity';
 
 export interface ProductDetailProps {
   product: Product;
+  onAddToCart?: Function;
 }
 
-export function ProductDetail({ product }: ProductDetailProps) {
+export function ProductDetail({ product, onAddToCart }: ProductDetailProps) {
   const [qty, setQty] = useState(1);
 
   const handleChangeQty = (qtyValue: number) => {
     setQty(qtyValue);
+  };
+
+  const onBuyClick = () => {
+    const cartItem = {
+      product: product._id,
+      quantity: qty,
+    };
+
+    onAddToCart?.(cartItem);
   };
 
   return (
@@ -213,7 +223,7 @@ export function ProductDetail({ product }: ProductDetailProps) {
         </Stack>
 
         <Stack direction="row" mt={1.5} alignItems="center">
-          <Button variant="outlined" size="medium">
+          <Button variant="outlined" size="medium" onClick={onBuyClick}>
             Buy Now
           </Button>
         </Stack>
