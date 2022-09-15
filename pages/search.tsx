@@ -205,3 +205,9 @@ export default function SearchPage(props: SearchPageProps) {
 }
 
 SearchPage.Layout = MainLayout;
+
+export async function getStaticProps() {
+  return {
+    props: {},
+  };
+}
