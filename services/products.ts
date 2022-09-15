@@ -8,6 +8,10 @@ export const productApi = {
     });
   },
 
+  getProductDetail(productId: string) {
+    return axiosClient.get(`/products/${productId}`);
+  },
+
   searchProduct(params: any) {
     return axiosClient.get('/products/filter/search', {
       params,

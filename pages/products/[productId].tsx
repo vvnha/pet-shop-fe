@@ -3,6 +3,9 @@ import * as React from 'react';
 import { MainLayout } from '@/components/layouts';
 import { ProductDetail } from '@/components/product/product-detail';
 import { Product } from '@/models';
+import { GetStaticPaths, GetStaticProps, GetStaticPropsContext } from 'next';
+import { productApi } from '@/services/products';
+import _get from 'lodash/get';
 
 export interface ProductPageProps {
   product: Product;
@@ -36,4 +39,50 @@ function ProductPage({ product = temProduct }: ProductPageProps) {
 }
 
 ProductPage.Layout = MainLayout;
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  type newQueryParam = {
+    [indx: string]: string | number;
+  };
+
+  const queryParams: newQueryParam = { _page: 1, _limit: 10 };
+
+  const searchQueryParams = new URLSearchParams();
+
+  for (const key in queryParams) {
+    searchQueryParams.append(key, queryParams[key].toString());
+  }
+
+  const response = await fetch(`${process.env.API_URL}/products?${searchQueryParams.toString()}`);
+
+  const data = await response.json();
+
+  const values = _get(data, 'values', []);
+
+  return {
+    paths: values.map((product: Product) => ({ params: { productId: product._id } })),
+    fallback: true,
+  };
+};
+
+export const getStaticProps: GetStaticProps<ProductPageProps> = async (
+  context: GetStaticPropsContext
+) => {
+  const productId = context.params?.productId;
+  if (!productId) return { notFound: true };
+
+  const response = await fetch(`${process.env.API_URL}/products/${productId}`);
+
+  const data = await response.json();
+
+  const value = _get(data, 'value', temProduct);
+
+  return {
+    props: {
+      product: value,
+    },
+    revalidate: 5,
+  };
+};
+
 export default ProductPage;

@@ -1,15 +1,22 @@
 import { Box, Button, Chip, IconButton, Input, Stack, TextField, Typography } from '@mui/material';
 import Image from 'next/image';
-import * as React from 'react';
+import React, { useState } from 'react';
 import heroImg from '@/public/food1.png';
 import { Add, Remove } from '@mui/icons-material';
 import { Product } from '@/models';
+import QuantityComponent from '../cart/quantity';
 
 export interface ProductDetailProps {
   product: Product;
 }
 
 export function ProductDetail({ product }: ProductDetailProps) {
+  const [qty, setQty] = useState(1);
+
+  const handleChangeQty = (qtyValue: number) => {
+    setQty(qtyValue);
+  };
+
   return (
     <Stack
       direction={{
@@ -201,24 +208,7 @@ export function ProductDetail({ product }: ProductDetailProps) {
             <Typography pr={2} color="#979697">
               Quantity:
             </Typography>
-            <Stack direction="row" mt={2} spacing={0.5}>
-              <IconButton size="small">
-                <Add />
-              </IconButton>
-              <TextField
-                id="outlined-size-small"
-                defaultValue="1"
-                size="small"
-                InputProps={{ inputProps: { min: 1 } }}
-                type="number"
-                sx={{
-                  width: '80px',
-                }}
-              />
-              <IconButton size="small">
-                <Remove />
-              </IconButton>
-            </Stack>
+            <QuantityComponent onChangeQty={handleChangeQty} />
           </Stack>
         </Stack>
 

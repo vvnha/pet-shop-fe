@@ -4,6 +4,7 @@ import Image from 'next/image';
 import React, { useState } from 'react';
 import heroImg from '@/public/food1.png';
 import { Add, Remove, DeleteOutlineOutlined } from '@mui/icons-material';
+import QuantityComponent from './quantity';
 
 export interface CartItemProps {
   cartItem: CartItemType;
@@ -25,17 +26,9 @@ export default function CartItem({
     onClickItem?.(cartItem);
   };
 
-  const onIncreaseClick = () => {
-    setQty((qty) => qty + 1);
-    const newCartItemState: CartItemType = { ...cartItemState, quantity: qty + 1 };
-
-    setCartItemState(newCartItemState);
-    onChangeQty?.(newCartItemState);
-  };
-
-  const onDecreaseClick = () => {
-    setQty((qty) => qty - 1);
-    const newCartItemState: CartItemType = { ...cartItemState, quantity: qty - 1 };
+  const handleChangeQty = (qtyvalue: number) => {
+    setQty(qtyvalue);
+    const newCartItemState: CartItemType = { ...cartItemState, quantity: qtyvalue };
 
     setCartItemState(newCartItemState);
     onChangeQty?.(newCartItemState);
@@ -99,31 +92,7 @@ export default function CartItem({
           </Stack>
           <Stack direction="row" justifyContent="space-between">
             <Stack direction="column" justifyContent="center" p={1}>
-              <Stack direction="row" spacing={0.5} maxWidth="120px">
-                <IconButton size="small" onClick={onIncreaseClick}>
-                  <Add />
-                </IconButton>
-                <TextField
-                  id="outlined-size-small"
-                  value={qty}
-                  size="small"
-                  InputProps={{
-                    inputProps: {
-                      style: {
-                        maxHeight: '16px',
-                      },
-                    },
-                  }}
-                  type="text"
-                  sx={{
-                    width: '70px',
-                    height: '16px',
-                  }}
-                />
-                <IconButton size="small" onClick={onDecreaseClick}>
-                  <Remove />
-                </IconButton>
-              </Stack>
+              <QuantityComponent initialQty={qty} onChangeQty={handleChangeQty} />
             </Stack>
             <Stack direction="column" justifyContent="center" p={0}>
               <Divider
