@@ -40,7 +40,7 @@ export default function HeaderDeskTop({ isLoggedIn, logOutClick = undefined }: H
   };
 
   const handleClickOrder = () => {
-    router.push('order/history');
+    router.push('/orders/history');
   };
 
   return (
