@@ -7,6 +7,7 @@ import _throttle from 'lodash/throttle';
 import { orderApi } from '@/services/order';
 import _get from 'lodash/get';
 import { toast } from 'react-toastify';
+import { Auth } from '@/components/common';
 
 export interface HistoryOrderPageProps {}
 
@@ -148,29 +149,31 @@ export default function HistoryOrderPage(props: HistoryOrderPageProps) {
   }, []);
 
   return (
-    <Box py={2}>
-      <Container>
-        <Stack
-          direction="column"
-          sx={{
-            position: 'relative',
-          }}
-        >
-          <Typography
+    <Auth>
+      <Box py={2}>
+        <Container>
+          <Stack
+            direction="column"
             sx={{
-              fontFamily: 'Pangolin',
-              fontWeight: '500',
-              fontStyle: 'normal',
-              fontSize: '28px',
-              lineHeight: '35px',
+              position: 'relative',
             }}
           >
-            Your orders
-          </Typography>
-          <OrderList scrollRef={scrollRef} orderList={orderList} />
-        </Stack>
-      </Container>
-    </Box>
+            <Typography
+              sx={{
+                fontFamily: 'Pangolin',
+                fontWeight: '500',
+                fontStyle: 'normal',
+                fontSize: '28px',
+                lineHeight: '35px',
+              }}
+            >
+              Your orders
+            </Typography>
+            <OrderList scrollRef={scrollRef} orderList={orderList} />
+          </Stack>
+        </Container>
+      </Box>
+    </Auth>
   );
 }
 
