@@ -70,9 +70,8 @@ const tempOrder: Order['product_list'] = [
 ];
 
 export default function HistoryOrderPage(props: HistoryOrderPageProps) {
-  const [orderList, setOrderList] = useState<Order['product_list']>(tempOrder);
+  const [orderList, setOrderList] = useState<Order['product_list']>([]);
   const scrollRef = useRef<HTMLDivElement>();
-  const [isFetching, setIsFetching] = useState(false);
   const [orderParams, setOrderParams] = useState({
     _page: 1,
     _limit: 10,
