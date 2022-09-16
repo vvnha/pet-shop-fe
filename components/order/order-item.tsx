@@ -3,10 +3,12 @@ import { Stack, Checkbox, Typography, IconButton, TextField, Divider } from '@mu
 import Image from 'next/image';
 import heroImg from '@/public/food1.png';
 import { Add, Remove, DeleteOutlineOutlined } from '@mui/icons-material';
-import { OrderItemType } from '@/models';
+import { Order, OrderItemType } from '@/models';
 
+type ArrayElement<ArrayType extends readonly unknown[]> =
+  ArrayType extends readonly (infer ElementType)[] ? ElementType : never;
 export interface OrderItemProps {
-  orderItem: OrderItemType;
+  orderItem: ArrayElement<Order['product_list']>;
 }
 
 export default function OrderItem({ orderItem }: OrderItemProps) {
