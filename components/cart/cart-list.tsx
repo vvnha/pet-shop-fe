@@ -2,10 +2,14 @@ import { CartItemType, OrderInputType } from '@/models';
 import { BottomNavigation, Box, Button, Stack, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import CartItem from './cart-item';
+import _throttle from 'lodash/throttle';
 
 export interface CartListProps {
   cartList?: CartItemType[];
   onOrderChange?: Function;
+  scrollRef?: any;
+  onSelectedChange?: Function;
+  onCartChange?: Function;
 }
 
 const tempCart: CartItemType[] = [
@@ -33,73 +37,25 @@ const tempCart: CartItemType[] = [
     },
     quantity: 1,
   },
-  {
-    product: {
-      _id: '3',
-      name: 'Drools | 3KG',
-      description: 'Adult chicken and egg Egg, Chicken 3 kg Dry Adult Dog Food',
-      price: 123.0,
-      pet_list: [],
-      promotion_list: [],
-      image_list: [],
-    },
-    quantity: 1,
-  },
-  {
-    product: {
-      _id: '4',
-      name: 'Drools | 3KG',
-      description: 'Adult chicken and egg Egg, Chicken 3 kg Dry Adult Dog Food',
-      price: 123.0,
-      pet_list: [],
-      promotion_list: [],
-      image_list: [],
-    },
-    quantity: 3,
-  },
-  {
-    product: {
-      _id: '5',
-      name: 'Drools | 3KG',
-      description: 'Adult chicken and egg Egg, Chicken 3 kg Dry Adult Dog Food',
-      price: 123.0,
-      pet_list: [],
-      promotion_list: [],
-      image_list: [],
-    },
-    quantity: 3,
-  },
-  {
-    product: {
-      _id: '6',
-      name: 'Drools | 3KG',
-      description: 'Adult chicken and egg Egg, Chicken 3 kg Dry Adult Dog Food',
-      price: 123.0,
-      pet_list: [],
-      promotion_list: [],
-      image_list: [],
-    },
-    quantity: 3,
-  },
-  {
-    product: {
-      _id: '7',
-      name: 'Drools | 3KG',
-      description: 'Adult chicken and egg Egg, Chicken 3 kg Dry Adult Dog Food',
-      price: 123.0,
-      pet_list: [],
-      promotion_list: [],
-      image_list: [],
-    },
-    quantity: 3,
-  },
 ];
 
-export default function CartList({ cartList = tempCart, onOrderChange }: CartListProps) {
+export default function CartList({
+  cartList = tempCart,
+  onOrderChange,
+  onSelectedChange,
+  scrollRef,
+  onCartChange,
+}: CartListProps) {
   const [currentCartList, setCurrentCartList] = useState<CartItemType[]>(cartList);
 
   const [totalPrice, setTotalPrice] = useState(0);
   const [selectedItemList, setSelectedItemList] = useState<CartItemType[]>([]);
+
+  useEffect(() => {
+    if (Array.isArray(cartList)) {
+      setCurrentCartList(cartList);
+    }
+  }, [cartList]);
 
   useEffect(() => {
     // any changes in currentCartList and cartItem is existed in  selectedItemList => update total price
@@ -111,8 +67,26 @@ export default function CartList({ cartList = tempCart, onOrderChange }: CartLis
       }, 0);
 
       setTotalPrice(newTotalPrice);
+
+      const newRemainItemList = updateRemainingItemList(currentCartList, selectedItemList);
+      onSelectedChange?.(newRemainItemList);
     }
   }, [selectedItemList]);
+
+  const updateRemainingItemList = (cartList: CartItemType[], selectedItemList: CartItemType[]) => {
+    const remainItemList = cartList.map((item) => ({
+      product: item.product?._id,
+      quantity: item.quantity,
+    }));
+
+    const selectedItemIdList = selectedItemList.map((item) => item.product?._id);
+
+    const newRemainItemList = remainItemList.filter(
+      (item) => !selectedItemIdList.includes(item.product)
+    );
+
+    return newRemainItemList;
+  };
 
   const deleteCartItem = (cartItem: CartItemType) => {
     if (!cartItem.product) return;
@@ -127,6 +101,12 @@ export default function CartList({ cartList = tempCart, onOrderChange }: CartLis
     newCurrentCartList.splice(currentCartItemIndex, 1);
 
     setCurrentCartList(newCurrentCartList);
+
+    //update cart to api
+
+    const newCartInputList = updateRemainingItemList(newCurrentCartList, []);
+
+    onCartChange?.(newCartInputList);
 
     //update in selectedItemList if cartItem is existed in selectedItemList
     const cartItemIndex = selectedItemList.findIndex(
@@ -159,6 +139,12 @@ export default function CartList({ cartList = tempCart, onOrderChange }: CartLis
     newCurrentCartList[currentCartItemIndex] = cartItem;
 
     setCurrentCartList(newCurrentCartList);
+
+    //update cart to api
+
+    const newCartInputList = updateRemainingItemList(newCurrentCartList, []);
+
+    onCartChange?.(newCartInputList);
 
     //update in selectedItemList if cartItem is existed in selectedItemList
     const cartItemIndex = selectedItemList.findIndex(
@@ -209,8 +195,34 @@ export default function CartList({ cartList = tempCart, onOrderChange }: CartLis
     deleteCartItem(cartItem);
   };
 
+  const handleScroll = () => {
+    const { scrollTop, scrollHeight } = scrollRef.current;
+
+    if (window.innerHeight + window.scrollY >= scrollHeight - scrollTop - 200) {
+      // setCurrentCartList((prevCart) => [...prevCart, ...tempCart]);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener(
+      'scroll',
+      _throttle(() => {
+        handleScroll();
+      }, 1000)
+    );
+
+    return () => {
+      window.removeEventListener(
+        'scroll',
+        _throttle(() => {
+          handleScroll();
+        }, 1000)
+      );
+    };
+  }, []);
+
   return (
-    <Box py={2}>
+    <Box py={2} ref={scrollRef}>
       {currentCartList.map((cartItem) => (
         <CartItem
           key={cartItem.product?._id || ''}
