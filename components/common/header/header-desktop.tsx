@@ -15,6 +15,7 @@ import GroupIcon from '@/public/Group.svg';
 import { PermIdentity, ShoppingCartOutlined, Search } from '@mui/icons-material';
 import Link from 'next/link';
 import { SearchInput } from './search-input';
+import { useRouter } from 'next/router';
 
 export interface HeaderDeskTopProps {
   isLoggedIn: boolean;
@@ -24,6 +25,8 @@ export interface HeaderDeskTopProps {
 export default function HeaderDeskTop({ isLoggedIn, logOutClick = undefined }: HeaderDeskTopProps) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const router = useRouter();
+
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -34,6 +37,10 @@ export default function HeaderDeskTop({ isLoggedIn, logOutClick = undefined }: H
   const handleLogOutClick = () => {
     logOutClick?.();
     setAnchorEl(null);
+  };
+
+  const handleClickOrder = () => {
+    router.push('order/history');
   };
 
   return (
@@ -69,14 +76,18 @@ export default function HeaderDeskTop({ isLoggedIn, logOutClick = undefined }: H
 
           <Stack direction="row">
             <Stack direction="column" justifyContent="center" px={2}>
-              <IconButton
-                sx={{
-                  color: 'primary.main',
-                  p: 0,
-                }}
-              >
-                <ShoppingCartOutlined />
-              </IconButton>
+              <Link href="/cart" passHref>
+                <MuiLink color="primary.main">
+                  <IconButton
+                    sx={{
+                      color: 'primary.main',
+                      p: 0,
+                    }}
+                  >
+                    <ShoppingCartOutlined />
+                  </IconButton>
+                </MuiLink>
+              </Link>
             </Stack>
             <Stack direction="column" alignItems="center" justifyContent="center" px={2}>
               {isLoggedIn ? (
@@ -117,7 +128,7 @@ export default function HeaderDeskTop({ isLoggedIn, logOutClick = undefined }: H
           }}
         >
           <MenuItem onClick={handleClose}>Profile</MenuItem>
-          <MenuItem onClick={handleClose}>My account</MenuItem>
+          <MenuItem onClick={handleClickOrder}>My Orders</MenuItem>
           <MenuItem onClick={handleLogOutClick}>Logout</MenuItem>
         </Menu>
       </Container>

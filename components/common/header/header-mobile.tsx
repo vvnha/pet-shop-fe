@@ -14,6 +14,7 @@ import * as React from 'react';
 import GroupIcon from '@/public/Group.svg';
 import Link from 'next/link';
 import { SearchInput } from './search-input';
+import { useRouter } from 'next/router';
 
 export interface HeaderMobileProps {
   isLoggedIn: boolean;
@@ -23,6 +24,8 @@ export interface HeaderMobileProps {
 export default function HeaderMobile({ isLoggedIn, logOutClick = undefined }: HeaderMobileProps) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const router = useRouter();
+
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -33,6 +36,11 @@ export default function HeaderMobile({ isLoggedIn, logOutClick = undefined }: He
     logOutClick?.();
     setAnchorEl(null);
   };
+
+  const handleClickOrder = () => {
+    router.push('order/history');
+  };
+
   return (
     <Box display={{ xs: 'block', md: 'none', lg: 'none' }}>
       <Container>
@@ -102,7 +110,7 @@ export default function HeaderMobile({ isLoggedIn, logOutClick = undefined }: He
           }}
         >
           <MenuItem onClick={handleClose}>Profile</MenuItem>
-          <MenuItem onClick={handleClose}>My account</MenuItem>
+          <MenuItem onClick={handleClickOrder}>Orders</MenuItem>
           <MenuItem onClick={handleLogOutClick}>Logout</MenuItem>
         </Menu>
 
