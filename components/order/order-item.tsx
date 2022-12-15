@@ -8,7 +8,7 @@ import { Order, OrderItemType } from '@/models';
 type ArrayElement<ArrayType extends readonly unknown[]> =
   ArrayType extends readonly (infer ElementType)[] ? ElementType : never;
 export interface OrderItemProps {
-  orderItem: ArrayElement<Order['product_list']>;
+  orderItem: Order['product_list'][number];
 }
 
 export default function OrderItem({ orderItem }: OrderItemProps) {

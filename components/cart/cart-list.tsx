@@ -188,7 +188,7 @@ export default function CartList({
       promotion_list: [],
     };
 
-    onOrderChange?.(order);
+    onOrderChange?.(order, totalPrice);
   };
 
   const handleDeleteItem = (cartItem: CartItemType) => {

@@ -1,4 +1,4 @@
-import { Box, Button, Chip, Stack, Typography } from '@mui/material';
+import { Box, Button, Chip, CircularProgress, Stack, Typography } from '@mui/material';
 import Image from 'next/image';
 import * as React from 'react';
 import heroImg from '@/public/food1.png';
@@ -11,8 +11,10 @@ export interface ProductProps {
 
 export function Product({ product }: ProductProps) {
   const router = useRouter();
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const handDetailClick = () => {
+    setIsLoading(true);
     router.push(`/products/${product._id}`);
   };
 
@@ -101,7 +103,7 @@ export function Product({ product }: ProductProps) {
         size="medium"
         onClick={handDetailClick}
       >
-        Buy Now
+        {isLoading ? <CircularProgress size={24} /> : 'Buy Now'}
       </Button>
     </Box>
   );

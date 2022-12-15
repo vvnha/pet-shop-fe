@@ -47,18 +47,21 @@ export default function HeaderMobile({ isLoggedIn, logOutClick = undefined }: He
         <Stack alignItems="center" direction="row" justifyContent="space-between">
           <Stack direction="row" alignItems="center" textAlign="center">
             <SvgIcon component={GroupIcon} inheritViewBox />
-            <Typography
-              sx={{
-                fontFamily: 'Pangolin',
-                fontStyle: 'normal',
-                fontWeight: '700',
-                fontSize: '1.5rem',
-                lineHeight: '30px',
-                color: '#FFAA00',
-              }}
-            >
-              Pethub
-            </Typography>
+            <Link href="/" passHref>
+              <MuiLink
+                sx={{
+                  fontFamily: 'Pangolin',
+                  fontStyle: 'normal',
+                  fontWeight: '700',
+                  fontSize: '1.5rem',
+                  lineHeight: '30px',
+                  color: '#FFAA00',
+                }}
+              >
+                Pethub
+              </MuiLink>
+            </Link>
+            {/* </Typography> */}
           </Stack>
 
           <Stack direction="row">

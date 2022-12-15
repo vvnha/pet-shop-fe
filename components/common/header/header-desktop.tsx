@@ -56,18 +56,20 @@ export default function HeaderDeskTop({ isLoggedIn, logOutClick = undefined }: H
               }}
               inheritViewBox
             />
-            <Typography
-              sx={{
-                fontFamily: 'Pangolin',
-                fontStyle: 'normal',
-                fontWeight: '700',
-                fontSize: '32px',
-                lineHeight: '37px',
-                color: '#FFAA00',
-              }}
-            >
-              Pethub
-            </Typography>
+            <Link href="/" passHref>
+              <MuiLink
+                sx={{
+                  fontFamily: 'Pangolin',
+                  fontStyle: 'normal',
+                  fontWeight: '700',
+                  fontSize: '1.5rem',
+                  lineHeight: '30px',
+                  color: '#FFAA00',
+                }}
+              >
+                Pethub
+              </MuiLink>
+            </Link>
           </Stack>
 
           <Stack flexGrow={1} px={3}>
