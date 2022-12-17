@@ -5,7 +5,19 @@ import { PublicConfiguration } from 'swr/dist/types';
 import _get from 'lodash/get';
 import { User } from '@/models/user';
 import { toast } from 'react-toastify';
-import { LoginPayload } from '@/models';
+import { ApiResponseData, LoginPayload } from '@/models';
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged,
+  FacebookAuthProvider,
+  GoogleAuthProvider,
+  signInWithPopup,
+  UserInfo,
+} from 'firebase/auth';
+import { auth } from '@/firebase';
+import { AxiosError } from 'axios';
 
 export function useAuth(options?: Partial<PublicConfiguration>) {
   // manage profile
@@ -20,10 +32,8 @@ export function useAuth(options?: Partial<PublicConfiguration>) {
 
   const firstLoading = profile === undefined && error === undefined;
 
-  async function login(payload: LoginPayload) {
-    await authApi.login(payload);
-
-    toast.success('Login successfully!');
+  async function login(firebaseToken: string) {
+    const response = await authApi.login(firebaseToken);
     await mutate(); // empty input mean it will trigger the profile in API to update automatically
   }
 
@@ -32,8 +42,10 @@ export function useAuth(options?: Partial<PublicConfiguration>) {
 
     formData.append('data', JSON.stringify(payload));
 
-    await authApi.register(formData);
+    const result = await authApi.register(formData);
     toast.success('Register successfully!');
+
+    return result;
   }
 
   async function logout() {
@@ -49,6 +61,81 @@ export function useAuth(options?: Partial<PublicConfiguration>) {
     await mutate();
   }
 
+  async function handleAutoRegister(payload: Partial<User>, firebaseToken: string) {
+    try {
+      const formData = new FormData();
+
+      formData.append('data', JSON.stringify(payload));
+
+      const result = await authApi.register(formData);
+      await login(firebaseToken);
+      toast.success('Login successfully!');
+
+      return result;
+    } catch (error: any) {
+      if (error.response.data.message.toLowerCase().includes('email has been used!')) {
+        await login(firebaseToken);
+      } else throw error;
+    }
+  }
+
+  async function signUpWithFirebase(payload: User) {
+    const { email, password } = payload;
+
+    try {
+      if (!auth) return;
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      await register({
+        ...payload,
+        firebase_user_id: userCredential.user.uid,
+      });
+    } catch (err: any) {
+      if (err.code === 'auth/email-already-in-use') {
+        toast.error('Email is already in use');
+      } else {
+        throw err;
+      }
+    }
+  }
+
+  async function signInWithFirebase(values: LoginPayload) {
+    const { email, password } = values;
+
+    try {
+      if (!auth) return;
+      const result = await signInWithEmailAndPassword(auth, email, password);
+      const userRes = result.user;
+      const newToken = await auth.currentUser?.getIdToken(true);
+
+      if (!newToken) {
+        throw Error('TOKEN NOT FOUND!');
+      }
+
+      const response = await login(newToken);
+    } catch (error) {
+      if (error !== 'auth/cancelled-popup-request') console.log(error);
+    }
+  }
+
+  async function signInGoogleWithFirebase() {
+    const provider = new GoogleAuthProvider();
+
+    try {
+      if (!auth) return;
+      const result = await signInWithPopup(auth, provider);
+      const { email, uid }: UserInfo = result.user;
+      const newToken = await auth.currentUser?.getIdToken(true);
+
+      if (!email) throw new Error('Something is wrong with your account!');
+      if (!newToken) throw new Error('Token is not found!');
+
+      await handleAutoRegister({ email, password: '', firebase_user_id: uid }, newToken);
+    } catch (error: any) {
+      if (error !== 'auth/cancelled-popup-request' && error !== 'auth/email-already-in-use')
+        console.log(error);
+    }
+  }
+
   return {
     profile,
     error,
@@ -58,5 +145,8 @@ export function useAuth(options?: Partial<PublicConfiguration>) {
     isLoggedIn,
     register,
     updateUser,
+    signUpWithFirebase,
+    signInWithFirebase,
+    signInGoogleWithFirebase,
   };
 }

@@ -3,8 +3,16 @@ import axiosClient from '@/helpers/api';
 import { User } from '@/models/user';
 
 export const authApi = {
-  login(payload: LoginPayload) {
-    return axiosClient.post('/login', payload);
+  login(firebaseToken: string) {
+    return axiosClient.post(
+      '/login',
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${firebaseToken}`,
+        },
+      }
+    );
   },
   logOut() {
     return axiosClient.post('/logout');

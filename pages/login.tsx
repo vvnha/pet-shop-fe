@@ -11,10 +11,12 @@ import { useRouter } from 'next/router';
 
 export default function Login() {
   const router = useRouter();
-  const { profile, login, logout } = useAuth({ revalidateOnMount: false });
+  const { profile, login, logout, signInGoogleWithFirebase, signInWithFirebase } = useAuth({
+    revalidateOnMount: false,
+  });
   async function handleLoginClick(values: LoginPayload) {
     try {
-      await login(values);
+      await signInWithFirebase(values);
       router.back();
     } catch (error) {
       console.log('fail login', error);
@@ -35,6 +37,11 @@ export default function Login() {
       handleLoginClick(values);
     },
   });
+
+  const handleSignupWithFirebase = async (params: {}) => {
+    await signInGoogleWithFirebase();
+    router.back();
+  };
 
   return (
     <Box>
@@ -78,6 +85,17 @@ export default function Login() {
               </Button>
             </Stack>
           </form>
+          <Stack direction="column" width="350px" spacing={1} mt={1} p={2}>
+            <Button
+              onClick={handleSignupWithFirebase}
+              fullWidth
+              variant="contained"
+              type="button"
+              size="large"
+            >
+              GOOGLE
+            </Button>
+          </Stack>
         </Stack>
       </Container>
     </Box>

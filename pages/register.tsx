@@ -12,13 +12,13 @@ import { User } from '@/models/user';
 // export interface LoginProps {}
 
 export default function Register() {
-  const { profile, login, register } = useAuth({ revalidateOnMount: false });
+  const { profile, login, register, signUpWithFirebase } = useAuth({ revalidateOnMount: false });
 
   async function handleSaveUser(values: any) {
     const newValues = { ...values };
     delete newValues.retypePassword;
 
-    register(newValues);
+    signUpWithFirebase(newValues);
   }
 
   const formik = useFormik({

@@ -6,6 +6,7 @@ export interface User {
   username?: string;
   email: string;
   password: string;
+  firebase_user_id: string;
   confirm_password?: string;
   role?: string;
   avatar_image?: string;
