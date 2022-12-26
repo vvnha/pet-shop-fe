@@ -9,7 +9,7 @@ import useSWR from 'swr';
 import _get from 'lodash/get';
 import { ApiResponseData, FilterType, Product } from '@/models';
 import { useRouter } from 'next/router';
-import { useSearch } from '@/hooks';
+import { useSearch, useTrans } from '@/hooks';
 import ProductListSkeleton from '@/components/skeletons/product-list';
 import PaginationComponent from '@/components/product/pagination';
 
@@ -30,6 +30,7 @@ export default function SearchPage(props: SearchPageProps) {
     _page: 1,
     _limit: 4,
   });
+  const trans = useTrans();
 
   const petSearchParams = new URLSearchParams();
   petSearchParams.append('_page', '1');
@@ -148,7 +149,7 @@ export default function SearchPage(props: SearchPageProps) {
                 color: 'primary.main',
               }}
             >
-              Filters
+              {trans.search.filter}
             </Typography>
             <Filter petList={petList} onFilterChange={handleFilterChange} />
           </Stack>
@@ -164,7 +165,7 @@ export default function SearchPage(props: SearchPageProps) {
               <Stack direction="row" alignItems="center" justifyContent="flex-end">
                 <IconButton onClick={toggleDrawer('right', true)} sx={{ color: 'primary.main' }}>
                   <FilterAltOutlined />
-                  <Typography>Filters</Typography>
+                  <Typography>{trans.search.filter}</Typography>
                 </IconButton>
               </Stack>
             </Stack>
@@ -193,7 +194,7 @@ export default function SearchPage(props: SearchPageProps) {
                   color: 'primary.main',
                 }}
               >
-                Filters
+                {trans.search.filter}
               </Typography>
             </IconButton>
             <Filter petList={petList} onFilterChange={handleFilterChange} />

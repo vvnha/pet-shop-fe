@@ -1,7 +1,7 @@
 import CartList from '@/components/cart/cart-list';
 import { Auth } from '@/components/common';
 import { MainLayout } from '@/components/layouts';
-import { useAuth } from '@/hooks';
+import { useAuth, useTrans } from '@/hooks';
 import { CartItemInputType, CartItemType, OrderInputType } from '@/models';
 import { User } from '@/models/user';
 import { orderApi } from '@/services/order';
@@ -116,6 +116,7 @@ const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY 
 
 export default function CartPage(props: CartPageProps) {
   const { profile, updateUser } = useAuth();
+  const trans = useTrans();
 
   const [cartList, setCartList] = useState([]);
   const [order, setOrder] = useState<OrderInputType>({ product_list: [], promotion_list: [] });
@@ -218,7 +219,7 @@ export default function CartPage(props: CartPageProps) {
                 lineHeight: '35px',
               }}
             >
-              Your cart
+              {trans.cart}
             </Typography>
             <CartList
               scrollRef={scrollRef}

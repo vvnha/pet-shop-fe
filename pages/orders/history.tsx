@@ -8,6 +8,7 @@ import { orderApi } from '@/services/order';
 import _get from 'lodash/get';
 import { toast } from 'react-toastify';
 import { Auth } from '@/components/common';
+import { useTrans } from '@/hooks';
 
 export interface HistoryOrderPageProps {}
 
@@ -78,6 +79,7 @@ export default function HistoryOrderPage(props: HistoryOrderPageProps) {
     _limit: 10,
   });
   const [maxPage, setMaxPage] = useState(2);
+  const trans = useTrans();
 
   useEffect(() => {
     (async () => {
@@ -167,7 +169,7 @@ export default function HistoryOrderPage(props: HistoryOrderPageProps) {
                 lineHeight: '35px',
               }}
             >
-              Your orders
+              {trans.order}
             </Typography>
             <OrderList scrollRef={scrollRef} orderList={orderList} />
           </Stack>

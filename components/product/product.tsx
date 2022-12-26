@@ -4,14 +4,16 @@ import * as React from 'react';
 import heroImg from '@/public/food1.png';
 import { Product } from '@/models';
 import { useRouter } from 'next/router';
+import { useTrans } from '@/hooks';
 
 export interface ProductProps {
   product: Product;
 }
 
-export function Product({ product }: ProductProps) {
+export function ProductPage({ product }: ProductProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = React.useState(false);
+  const trans = useTrans();
 
   const handDetailClick = () => {
     setIsLoading(true);
@@ -103,7 +105,7 @@ export function Product({ product }: ProductProps) {
         size="medium"
         onClick={handDetailClick}
       >
-        {isLoading ? <CircularProgress size={24} /> : 'Buy Now'}
+        {isLoading ? <CircularProgress size={24} /> : trans.product.buyNow}
       </Button>
     </Box>
   );

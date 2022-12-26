@@ -1,7 +1,7 @@
 import { Product } from '@/models';
 import { Grid } from '@mui/material';
 import * as React from 'react';
-import { Product as ProductItem } from './product';
+import { ProductPage as ProductItem } from './product';
 
 export interface ProductListProps {
   productsPerRow?: number;

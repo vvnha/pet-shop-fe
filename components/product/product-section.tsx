@@ -1,3 +1,4 @@
+import { useTrans } from '@/hooks';
 import { ApiResponseData, Product } from '@/models';
 import { Box, Container, Divider, Pagination, Stack, Typography } from '@mui/material';
 import React, { useState } from 'react';
@@ -16,6 +17,7 @@ export function ProductsSection({
   onChangePagination,
 }: ProductsSectionProps) {
   const [page, setPage] = useState(pagination?._page || 1);
+  const trans = useTrans();
 
   return (
     <Box>
@@ -30,7 +32,7 @@ export function ProductsSection({
               lineHeight: '35px',
             }}
           >
-            Dog Nutrients & Food
+            {trans.home.productSectionTitle}
           </Typography>
           <Divider
             sx={{

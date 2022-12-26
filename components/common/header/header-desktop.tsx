@@ -16,6 +16,8 @@ import { PermIdentity, ShoppingCartOutlined, Search } from '@mui/icons-material'
 import Link from 'next/link';
 import { SearchInput } from './search-input';
 import { useRouter } from 'next/router';
+import { useTrans } from '@/hooks';
+import Language from './language';
 
 export interface HeaderDeskTopProps {
   isLoggedIn: boolean;
@@ -26,6 +28,7 @@ export default function HeaderDeskTop({ isLoggedIn, logOutClick = undefined }: H
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const router = useRouter();
+  const trans = useTrans();
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -78,6 +81,9 @@ export default function HeaderDeskTop({ isLoggedIn, logOutClick = undefined }: H
 
           <Stack direction="row">
             <Stack direction="column" justifyContent="center" px={2}>
+              <Language />
+            </Stack>
+            <Stack direction="column" justifyContent="center" px={2}>
               <Link href="/cart" passHref>
                 <MuiLink color="primary.main">
                   <IconButton
@@ -105,7 +111,9 @@ export default function HeaderDeskTop({ isLoggedIn, logOutClick = undefined }: H
               ) : (
                 <Box>
                   <Link href="/login" passHref>
-                    <MuiLink color="primary.main">Login / Signup</MuiLink>
+                    <MuiLink color="primary.main">
+                      {trans.login} / {trans.signup}
+                    </MuiLink>
                   </Link>
                 </Box>
               )}
@@ -129,9 +137,9 @@ export default function HeaderDeskTop({ isLoggedIn, logOutClick = undefined }: H
             horizontal: 'right',
           }}
         >
-          <MenuItem onClick={handleClose}>Profile</MenuItem>
-          <MenuItem onClick={handleClickOrder}>My Orders</MenuItem>
-          <MenuItem onClick={handleLogOutClick}>Logout</MenuItem>
+          <MenuItem onClick={handleClose}>{trans.header.profile}</MenuItem>
+          <MenuItem onClick={handleClickOrder}>{trans.header.order}</MenuItem>
+          <MenuItem onClick={handleLogOutClick}>{trans.logout}</MenuItem>
         </Menu>
       </Container>
     </Box>

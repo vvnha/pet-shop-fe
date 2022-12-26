@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useAuth } from '@/hooks';
+import { useAuth, useTrans } from '@/hooks';
 import { authApi } from '@/services/auth';
 import { Box, Button, Container, Stack, TextField, Typography } from '@mui/material';
 import { useFormik } from 'formik';
@@ -14,6 +14,8 @@ export default function Login() {
   const { profile, login, logout, signInGoogleWithFirebase, signInWithFirebase } = useAuth({
     revalidateOnMount: false,
   });
+  const trans = useTrans();
+
   async function handleLoginClick(values: LoginPayload) {
     try {
       await signInWithFirebase(values);
@@ -57,13 +59,13 @@ export default function Login() {
               textAlign: 'center',
             }}
           >
-            Login
+            {trans.login}
           </Typography>
           <form onSubmit={formik.handleSubmit}>
             <Stack direction="column" width="350px" spacing={1} mt={1} p={2}>
               <TextField
                 id="outlined-name"
-                label="Email"
+                label={trans.signForm.email}
                 name="email"
                 onChange={formik.handleChange}
                 value={formik.values.email}
@@ -72,7 +74,7 @@ export default function Login() {
               />
               <TextField
                 id="outlined-name"
-                label="Password"
+                label={trans.signForm.password}
                 type="password"
                 name="password"
                 onChange={formik.handleChange}
@@ -81,7 +83,7 @@ export default function Login() {
                 helperText={formik.errors.password}
               />
               <Button variant="contained" type="submit" size="large">
-                Log in
+                {trans.login}
               </Button>
             </Stack>
           </form>

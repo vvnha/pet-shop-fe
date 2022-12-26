@@ -5,6 +5,7 @@ import heroImg from '@/public/food1.png';
 import { Add, Remove } from '@mui/icons-material';
 import { Product } from '@/models';
 import QuantityComponent from '../cart/quantity';
+import { useTrans } from '@/hooks';
 
 export interface ProductDetailProps {
   product: Product;
@@ -13,6 +14,7 @@ export interface ProductDetailProps {
 
 export function ProductDetail({ product, onAddToCart }: ProductDetailProps) {
   const [qty, setQty] = useState(1);
+  const trans = useTrans();
 
   const handleChangeQty = (qtyValue: number) => {
     setQty(qtyValue);
@@ -170,7 +172,7 @@ export function ProductDetail({ product, onAddToCart }: ProductDetailProps) {
 
         <Stack flexGrow={0.5}>
           <Stack direction="row" alignItems="center" mt={1.5}>
-            <Typography color="#979697">Animals:</Typography>
+            <Typography color="#979697">{trans.product.petType}:</Typography>
             {product.pet_list.map((item) => (
               <Chip key={item._id} label={item.name} color="primary" size="small" sx={{ ml: 1 }} />
             ))}
@@ -178,7 +180,7 @@ export function ProductDetail({ product, onAddToCart }: ProductDetailProps) {
 
           <Stack direction="row" mt={1.5}>
             <Typography pr={2} color="#979697">
-              Description:
+              {trans.product.desc}:
             </Typography>
             <Typography
               sx={{
@@ -195,7 +197,7 @@ export function ProductDetail({ product, onAddToCart }: ProductDetailProps) {
 
           <Stack direction="row" alignItems="center" mt={1.5}>
             <Typography pr={2} color="#979697">
-              Price:
+              {trans.product.price}:
             </Typography>
             <Typography
               sx={{
@@ -216,7 +218,7 @@ export function ProductDetail({ product, onAddToCart }: ProductDetailProps) {
           </Stack>
           <Stack direction="column" mt={2}>
             <Typography pr={2} color="#979697">
-              Quantity:
+              {trans.product.qty}:
             </Typography>
             <QuantityComponent onChangeQty={handleChangeQty} />
           </Stack>
@@ -224,7 +226,7 @@ export function ProductDetail({ product, onAddToCart }: ProductDetailProps) {
 
         <Stack direction="row" mt={1.5} alignItems="center">
           <Button variant="outlined" size="medium" onClick={onBuyClick}>
-            Buy Now
+            {trans.product.buyNow}
           </Button>
         </Stack>
       </Stack>

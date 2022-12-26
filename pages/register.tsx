@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useAuth } from '@/hooks';
+import { useAuth, useTrans } from '@/hooks';
 import { authApi } from '@/services/auth';
 import { Box, Button, Container, IconButton, Stack, TextField, Typography } from '@mui/material';
 import { EmptyLayout } from '@/components/layouts';
@@ -13,6 +13,7 @@ import { User } from '@/models/user';
 
 export default function Register() {
   const { profile, login, register, signUpWithFirebase } = useAuth({ revalidateOnMount: false });
+  const trans = useTrans();
 
   async function handleSaveUser(values: any) {
     const newValues = { ...values };
@@ -56,13 +57,13 @@ export default function Register() {
               textAlign: 'center',
             }}
           >
-            Register
+            {trans.signup}
           </Typography>
           <form onSubmit={formik.handleSubmit}>
             <Stack direction="column" width="330px" spacing={1} mt={1} p={2}>
               <TextField
                 id="outlined-name"
-                label="Name"
+                label={trans.signForm.name}
                 name="name"
                 onChange={formik.handleChange}
                 value={formik.values.name}
@@ -71,7 +72,7 @@ export default function Register() {
               />
               <TextField
                 id="outlined-name"
-                label="Email"
+                label={trans.signForm.email}
                 name="email"
                 onChange={formik.handleChange}
                 value={formik.values.email}
@@ -80,7 +81,7 @@ export default function Register() {
               />
               <TextField
                 id="outlined-name"
-                label="Password"
+                label={trans.signForm.password}
                 type="password"
                 name="password"
                 onChange={formik.handleChange}
@@ -90,7 +91,7 @@ export default function Register() {
               />
               <TextField
                 id="outlined-name"
-                label="Confirm Password"
+                label={trans.signForm.retypePassword}
                 type="password"
                 name="retypePassword"
                 onChange={formik.handleChange}
@@ -100,7 +101,7 @@ export default function Register() {
               />
 
               <Button variant="contained" type="submit" size="large">
-                Sign up
+                {trans.signup}
               </Button>
             </Stack>
           </form>

@@ -4,6 +4,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { FilterType } from '@/models';
 import _get from 'lodash/get';
+import { useTrans } from '@/hooks';
 
 export interface PriceFilterProps {
   onFilterPrice?: Function;
@@ -11,6 +12,8 @@ export interface PriceFilterProps {
 }
 
 export default function PriceFilter({ onFilterPrice, filters }: PriceFilterProps) {
+  const trans = useTrans();
+
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
@@ -29,7 +32,7 @@ export default function PriceFilter({ onFilterPrice, filters }: PriceFilterProps
   return (
     <>
       <Typography pr={2} color="#979697" mb={1}>
-        Price:
+        {trans.search.price}:
       </Typography>
       <form onSubmit={formik.handleSubmit}>
         <Stack direction="row">
@@ -78,7 +81,7 @@ export default function PriceFilter({ onFilterPrice, filters }: PriceFilterProps
           type="submit"
           fullWidth
         >
-          Apply
+          {trans.search.apply}
         </Button>
       </form>
     </>

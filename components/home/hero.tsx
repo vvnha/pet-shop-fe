@@ -2,10 +2,12 @@ import { Box, Button, Container, Stack, SvgIcon, Typography } from '@mui/materia
 import Image from 'next/image';
 import * as React from 'react';
 import heroImg from '@/public/herocat.png';
+import { useTrans } from '@/hooks';
 
 export interface HeroProps {}
 
 export default function Hero(props: HeroProps) {
+  const trans = useTrans();
   return (
     <Box
       component="section"
@@ -45,7 +47,7 @@ export default function Hero(props: HeroProps) {
                   fontWeight: 400,
                 }}
               >
-                Taking care for your Smart Pet !
+                {trans.home.slogan}
               </Typography>
               <Typography
                 mb={{ xs: 3.5, md: 5 }}
@@ -59,7 +61,7 @@ export default function Hero(props: HeroProps) {
                   color: '#181817',
                 }}
               >
-                Human–canine bonding is the relationship between dogs and humans.
+                {trans.home.sloganDesc}
               </Typography>
               <Button variant="contained" size="large">
                 Download Resume

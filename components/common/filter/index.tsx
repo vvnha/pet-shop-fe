@@ -5,6 +5,7 @@ import PriceFilter from './price-filter';
 import { ArrowUpwardOutlined, ArrowDownwardOutlined } from '@mui/icons-material';
 import { FilterType, Pet } from '@/models';
 import { useRouter } from 'next/router';
+import { useTrans } from '@/hooks';
 
 export interface FilterProps {
   petList?: Pet[];
@@ -13,6 +14,7 @@ export interface FilterProps {
 
 export default function Filter({ petList = [], onFilterChange }: FilterProps) {
   const router = useRouter();
+  const trans = useTrans();
 
   const [filters, setFilters] = useState<FilterType>({
     text: '',
@@ -74,7 +76,7 @@ export default function Filter({ petList = [], onFilterChange }: FilterProps) {
     <Stack p={1}>
       <Stack direction="column">
         <PetRadioButton
-          groupLabel="Animals"
+          groupLabel={trans.product.petType}
           optionList={petList}
           onAnmialTypeChange={handleAnmialTypeChange}
           filters={filters}
@@ -82,7 +84,7 @@ export default function Filter({ petList = [], onFilterChange }: FilterProps) {
       </Stack>
       <Stack direction="column">
         <Typography pr={2} color="#979697" mt={1}>
-          Sort:
+          {trans.search.sort}:
         </Typography>
         <Button
           variant="outlined"
@@ -92,7 +94,7 @@ export default function Filter({ petList = [], onFilterChange }: FilterProps) {
           }}
           onClick={handleChangeSort}
         >
-          Price {SortIcon}
+          {trans.search.price} {SortIcon}
         </Button>
       </Stack>
       <Stack direction="column" mt={2}>
