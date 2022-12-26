@@ -34,10 +34,10 @@ export default function Language(props: LanguageProps) {
   };
 
   const changeLang = () => {
-    const { locale } = router;
+    const { pathname, asPath, query, locale } = router;
 
     const lang = locale === 'vi' ? 'en' : 'vi';
-    router.push('/', '/', { locale: lang });
+    router.push({ pathname, query }, asPath, { locale: lang });
   };
   return <SvgIcon component={renderNationSVGFlag(lang)} inheritViewBox onClick={changeLang} />;
 }
